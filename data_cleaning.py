@@ -82,12 +82,10 @@ def catA(fname='hmxbcat.dat', length=119):
             Name3=f.read(15)
             f.readline()
             data.append([x.decode('utf-8').replace(' ','') for x in (Name,Type,RAh,RAm,RAs,u_RAs,DE_,DEd,DEm,DEs,u_DEs,GLON,GLAT,Pos,e_Pos,Opt,r_Opt,Vmag,Vmagl,u_Vmag,B_V,u_B_V,B_Vl,U_B,l_EB_V,EB_V,l_EB_V2,EB_V2,u_EB_V,r_Vmag,l_Fx,Fx,Fxu,Range,r_Fx,Porb,Porb2,u_Porb,Ppulse,u_Ppulse,r_Ppulse,Cat,SpType,Name2,u_Name2,Name3)])
-    return pd.DataFrame(data,columns=Fields)
+    return pd.DataFrame(data,columns=Fields).set_index(['Name'])
     
 hmxb=catA('hmxbcat.dat',130)
 lmxb=catA('lmxbcat.dat',150)
-print(type(hmxb))
-print("\n\n")
-print(hmxb.iloc[0])
-print("\n\n")
-print(lmxb.iloc[0])
+
+hmxb.to_csv('hmxbcat.csv',sep=';')
+lmxb.to_csv('lmxbcat.csv',sep=';')
