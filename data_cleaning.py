@@ -7,17 +7,20 @@ Created on Fri Mar 19 20:35:32 2021
 
 import pandas as pd
 import numpy as np
+import re
+import json
+
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
 pd.set_option('display.width', None)
 pd.set_option('display.max_colwidth', None)
 
-def catA(fname='hmxbcat.dat', length=119):
-    Fields=['Name','Type','RAh','RAm','RAs','u_RAs','DE_','DEd','DEm','DEs','u_DEs','GLOS','GLAT','Pos','e_Pos','Opt',
+def catA(fname='hmxbcat.dat', length=119,Fields=['Name','Type','RAh','RAm','RAs','u_RAs','DE_','DEd','DEm','DEs','u_DEs','GLOS','GLAT','Pos','e_Pos','Opt',
        'r_Opt','Vmag','Vmagl','u_Vmag','B_V','u_B_V','B_Vl','U_B','l_EB_V','EB_V','l_EB_V2','EB_V2','u_EB_V','r_Vmag',
        'l_Fx','Fx','Fxu','Range','RFx','Porb','Porb2','u_Porb','Ppulse','u_Ppulse','r_Ppulse','Cat','SpType','Name2',
-       'u_Name2','Name3']
-    data=[]
+       'u_Name2','Name3']):
+    
+    data=[]    
     with open("D:/Inter-IIT-Astro/J_A+AS_147_25/"+fname, "rb") as f:  # binary mode
         for i in range(length):
             Name=f.read(16);f.read(1)
@@ -89,3 +92,31 @@ lmxb=catA('lmxbcat.dat',150)
 
 hmxb.to_csv('hmxbcat.csv',sep=';')
 lmxb.to_csv('lmxbcat.csv',sep=';')
+
+def catB(fname="AS_observations_cat_Sept2018.txt",length=900,Fields=['Id','DnT','ObsId','Obs','Ra','Dec','ObsName','Name','Sat']):
+    data=[]
+    with open(fname, "r") as f:
+        for i in range(900):
+            data.append(re.split('\t|::|\n',f.readline())[:-1])
+    return pd.DataFrame(data,columns=Fields).set_index(['Id'])
+
+astrosat=catB()
+astrosat.to_csv("Astrosat_Obs.csv")
+
+def catC(fname="AS_publications2019-21.txt",Fields=['Title','Authors', 'Bibliographic Code','Keywords','Abstract','URL']):
+    with open(fname,'r',encoding='utf8') as f:
+        data=[ [y for y in x.split('\n ') if y.lstrip() != ''] for x in list(f.read().split('\n\n\n'))]
+
+    data_dict=[]
+    for i in range(len(data)):
+        data_dict.append({})
+        for cell in range(len(data[i])):
+            key=data[i][cell].lstrip().partition(':')[0]
+            data_dict[i].update({key : data[i][cell].lstrip().partition(':')[2].lstrip()})
+    final_data = {'articles':data_dict}
+    return final_data
+
+publications=catC()
+
+with open("Astrosat_Pubs.json", 'w') as f:
+    json.dump(publications, f, indent=3)
