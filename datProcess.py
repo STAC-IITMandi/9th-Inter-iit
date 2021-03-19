@@ -1,11 +1,16 @@
-#python
+# Python
 import os
 import pandas as pd
+import numpy as np
 os.chdir('data')
 file = open('hmxbcat.dat')
 
 data = file.readlines()
 file.close()
+file = open('lmxbcat.dat')
+_data = file.readlines()
+data = data + _data
+
 def repChar(str, pos, char):
     '''This function replaces <pos> with <char> at a specific position in a string <str>.'''
     str = str[:pos] + char + str[pos + 1:]
@@ -26,62 +31,10 @@ for i in range(len(data)):
         temp = insertChar(temp, delimiter -1 + insComma.index(delimiter), ',')
     data[i] = temp
 
-Fields = ['Name', 
-'Type',
-'RAh',
-'RAm',
-'RAs',
-'u_RAs',
-'DE-',
-'DEd',
-'DEm',
-'DEs',
-'u_DEs',
-'GLON',
-'GLAT',
-'Pos',
-'e_Pos',
-'Opt',
-'r_Opt',
-'Vmag',
-'---',
-'Vmagl',
-'u_Vmag',
-'B-V',
-'u_B-V',
-'---',
-'B-Vl',
-'U-B',
-'l_E(B-V)',
-'E(B-V)',
-'---',
-'l_E(B-V)2',
-'E(B-V)2',
-'u_E(B-V)',
-'r_Vmag',
-'l_Fx',
-'Fx',
-'---',
-'Fxu',
-'Range',
-'r_Fx',
-'Porb',
-'---',
-'Porb2',
-'u_Porb',
-'Ppulse',
-'u_Ppulse',
-'r_Ppulse',
-'Cat',
-'SpType',
-'Name2', 
-'u_Name2',
-'---',
-'Name3']
+Fields = ['Name', 'Type', 'RAh', 'RAm', 'RAs', 'u_RAs', 'DE-', 'DEd', 'DEm', 'DEs', 'u_DEs', 'GLON', 'GLAT', 'Pos', 'e_Pos', 'Opt', 'r_Opt', 'Vmag', '---', 'Vmagl', 'u_Vmag', 'B-V', 'u_B-V', '---', 'B-Vl', 'U-B', 'l_E(B-V)', 'E(B-V)', '---', 'l_E(B-V)2', 'E(B-V)2', 'u_E(B-V)', 'r_Vmag', 'l_Fx', 'Fx', '---', 'Fxu', 'Range', 'r_Fx', 'Porb', '---', 'Porb2', 'u_Porb', 'Ppulse', 'u_Ppulse', 'r_Ppulse', 'Cat', 'SpType', 'Name2',  'u_Name2', '---', 'Name3']
 for i in range(len(data)):
-    data[i] = data[i].split(',')
+    data[i] = np.array(data[i].split(','))
 
-import numpy as np
-data = np.array(data, dtype = object)
 print(data)
+# print(data[0])
 # print(pd.DataFrame(data, columns = Fields))
