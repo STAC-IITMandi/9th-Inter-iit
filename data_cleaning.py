@@ -9,6 +9,8 @@ import pandas as pd
 import numpy as np
 import re
 import json
+import os
+os.chdir(data)
 
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
@@ -21,7 +23,7 @@ def catA(fname='hmxbcat.dat', length=119,Fields=['Name','Type','RAh','RAm','RAs'
        'u_Name2','Name3']):
     
     data=[]    
-    with open("D:/Inter-IIT-Astro/J_A+AS_147_25/"+fname, "rb") as f:  # binary mode
+    with open(fname, "rb") as f:  # binary mode
         for i in range(length):
             Name=f.read(16);f.read(1)
             Type=f.read(6);f.read(1)
@@ -103,7 +105,7 @@ def catB(fname="AS_observations_cat_Sept2018.txt",length=900,Fields=['Id','DnT',
 astrosat=catB()
 astrosat.to_csv("Astrosat_Obs.csv")
 
-def catC(fname="AS_publications2019-21.txt",Fields=['Title','Authors', 'Bibliographic Code','Keywords','Abstract','URL']):
+def catC(fname="AS_publications2019-21.txt"):
     with open(fname,'r',encoding='utf8') as f:
         data=[ [y for y in x.split('\n ') if y.lstrip() != ''] for x in list(f.read().split('\n\n\n'))]
 
