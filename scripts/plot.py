@@ -6,7 +6,7 @@ from mpld3 import plugins
 import random
 import string
 
-mpld3.enable_notebook()
+# mpld3.enable_notebook()
 
 class ClickInfo(plugins.PluginBase):
     """Plugin for getting info on click"""
@@ -50,4 +50,13 @@ plugins.connect(fig, tooltip)
 plugins.connect(fig, plugins.Reset(), plugins.BoxZoom(), plugins.Zoom())
 plugins.connect(fig, ClickInfo(points, labels))
 
+# print fig_id and save JS stuff to html
 js_script = mpld3.fig_to_html(fig, template_type="simple")
+tmp, js_script = js_script.split('</style>')[-1].split('</div>')
+tmp = tmp.strip()
+tmp = tmp[tmp.find("fig_"):-2:]
+js_script = js_script.split('\n\n', 1)[-1].split('</script>')[0].strip()
+print(tmp)
+js_file= open("plot.js","w")
+js_file.write(js_script)
+js_file.close()
