@@ -1,15 +1,13 @@
-var http = require('http');
-var fs = require('fs');
-
+var express = require('express');
+var app = express();
 const PORT = 8080;
 
-fs.readFile('./templates/index.html', function(err, html) {
+app.set('view engine', 'ejs');
 
-    if (err) throw err;
+app.get('/', (req, res) => {
+    res.render('index');
+});
 
-    http.createServer(function(request, response) {
-        response.writeHeader(200, { "Content-Type": "text/html" });
-        response.write(html);
-        response.end();
-    }).listen(PORT, () => console.log(`App is live at http://127.0.0.1:${PORT}`));
+var server = app.listen(PORT, function() {
+    console.log(`App is live at http://127.0.0.1:${PORT}`);
 });
