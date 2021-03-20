@@ -1,0 +1,242 @@
+V/106               Catalogue of X-ray binaries                      (Liu+ 2001)
+================================================================================
+A catalogue of high- and low- mass X-ray binaries
+     Liu Q.Z., van  Paradijs J., van  den  Heuvel E.P.J.
+    <Astron. Astrophys. Suppl. Ser. 147, 25 (2000)>
+    =2000A&AS..147...25L
+    <Astron. Astrophys. Suppl. Ser. 368, 1021 (2001)>
+    =2001A&A...368.1021L
+================================================================================
+ADC_Keywords: Binaries, X-ray ; Photometry, UBV ; Cross identifications
+Keywords: stars: massive star - stars: X-ray - stars: binaries
+
+Abstract:
+    We present a catalogue of high-mass X-ray binaries. The catalogue is
+    an updated version of the catalogue of van Paradijs (1995, Cat.
+    <V/90>).
+
+    The new high-mass catalogue contains 130 sources, 61 new high-mass
+    X-ray binaries in addition to the 69 sources listed in van Paradijs'
+    catalogue. Most of the new sources are identified to be Be/X-ray
+    binaries. Some sources, however, are only tentatively identified as
+    high-mass X-ray binaries on the basis of a transient character and/or
+    a hard X-ray spectrum. Further identification in other wavelength
+    bands is needed to finally determine the features of these sources.
+
+    The new low-mass catalogue contains 150 sources, 31 new low-mass X-ray
+    binaries in addition to the 119 sources listed in van Paradijs'
+    catalogue.
+
+    The aim of this catalogue is to provide the reader with some basic
+    information on the X-ray sources and their counterparts in other
+    wavelength ranges (UV, optical, IR, radio). In cases where there is
+    some doubt about the high or low-mass nature of the X-ray binary this
+    is mentioned. Some doubtful cases have not been included in the
+    catalogue although they had been suggested by some authors to be
+    high-mass X-ray binaries, for example GRS 1915+105 and 1WGA
+    J1958.2+3232.
+
+Notes about the electronic version of the calatogue:
+    All positions were converted to J2000.0 (the original catalogue lists
+    B1950 or J2000 positions, depending of the source names).
+
+File Summary:
+--------------------------------------------------------------------------------
+ FileName      Lrecl  Records   Explanations
+--------------------------------------------------------------------------------
+ReadMe            80        .   This file
+hmxbcat.dat      359      130   High-mass X-ray binaries catalog
+lmxbcat.dat      348      150   Low-mass X-ray binaries catalog
+hmxbnote.dat      80      425   Individual notes (HMXB)
+lmxbnote.dat      80      780   Individual notes (LMXB)
+hmxbrefs.dat     176      814   References (HMXB)
+lmxbrefs.dat     174     1472   References (LMXB)
+hmxb.tex         185     2524   LaTeX version of the hmxb catalog
+lmxb.tex         202     2062   LaTeX version of the lmxb catalog
+--------------------------------------------------------------------------------
+
+See also:
+   V/99 : Cataclysmic Binaries and LMXB Catalogue (Ritter+ 1998)
+
+Byte-by-byte Description of file: hmxbcat.dat lmxbcat.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units    Label   Explanations
+--------------------------------------------------------------------------------
+   1- 16  A16   ---      Name    Source Name (1)
+  18- 23  A6    ---      Type    [ABTUDGPVZ (?)] X-ray type (2)
+  25- 26  I2    h        RAh     Right ascension (J2000.0) (9)
+  28- 29  I2    min      RAm     Right ascension (J2000.0) (9)
+  31- 36  F6.3  s        RAs     ? Right ascension (J2000.0) (9)
+      37  A1    ---    u_RAs     Uncertainty flag on RAs
+      38  A1    ---      DE-     Declination sign
+  39- 40  I2    deg      DEd     Declination (J2000.0) (9)
+  42- 43  I2    arcmin   DEm     Declination (J2000.0) (9)
+  45- 49  F5.2  arcsec   DEs     ? Declination (J2000.0) (9)
+      50  A1    ---    u_DEs     Uncertainty flag on DEs
+  52- 57  F6.2  deg      GLON    Galactic longitude
+  59- 66  F8.4  deg      GLAT    Galactic latitude
+  68- 71  A4    ---      Pos     Type of observation from which the source
+                                  position has been derived (3)
+  73- 79  F7.2  arcsec e_Pos     ? Accuracy of the position (4)
+  81- 97  A17   ---      Opt     Optical counterpart (5)
+     99  A1    ---      ---     ([)
+ 100-114  A15   ---    r_Opt     References for Optical counterpart (finding
+                                  charts) (in [lh]mxbrefs.dat files)
+     115  A1    ---      ---     (])
+ 117-122  F6.3  mag      Vmag    ? V magnitude (6)
+     123  A1    ---      ---     [-]
+ 124-128  F5.2  mag      Vmagl   ? Lower magnitude when interval
+     129  A1    ---    u_Vmag    Uncertainty flag on Vmag
+ 131-136  F6.3  mag      B-V     ? B-V colour index
+     137  A1    ---    u_B-V     Uncertainty flag on B-V
+     138  A1    ---      ---     [-]
+ 139-142  F4.2  mag      B-Vl    ? Lower B-V colour index when interval
+ 144-148  F5.2  mag      U-B     ? U-B colour index
+     150  A1    ---    l_E(B-V)  [~<>] Limit flag on E(B-V)
+ 151-156  F6.3  mag      E(B-V)  ? Interstellar reddening
+     157  A1    ---      ---     [-]
+ 158-159  A2    ---    l_E(B-V)2 [>= ] Limit flag on E(B-V)2
+ 160-163  F4.2  mag      E(B-V)2 ? Second value of E(B-V) when interval
+     164  A1    ---    u_E(B-V)  [:P] Uncertainty flag on E(B-V)
+     166  A1    ---      ---     ([)
+ 167-182  A16   ---    r_Vmag    References for UBV photometry,
+                                   in [lh]mxbrefs.dat files
+     183  A1    ---      ---     (])
+     185  A1    ---    l_Fx      Limit flag on Fx
+ 186-196  F11.3 uJy      Fx      ? Average X-ray flux (2-10keV)
+     197  A1    ---      ---     [-]
+ 198-205  F8.2  uJy      Fxu     ? Upper limit of X-ray flux when interval
+ 207-220  A14   ---      Range   Energy range for flux if not 2-20keV
+     222  A1    ---      ---     ([)
+ 223-240  A18   ---    r_Fx      References for X-ray flux,
+                                   in [lh]mxbrefs.dat files
+     241  A1    ---      ---     (])
+ 243-252  F10.6  d       Porb    ? Orbital period
+     253  A1    ---      ---     [-]
+ 254-257  F4.1  d        Porb2   ? Second value of Porb when interval
+     258  A1    ---    u_Porb    [?:d] Uncertainty flag on Porb
+ 260-270  F11.5 s        Ppulse  ? Pulse period for X-ray pulsars
+     271  A1    ---    u_Ppulse  [?] Uncertainty flag on Ppulse
+     273  A1    ---      ---     ([)
+ 274-288  A15   ---    r_Ppulse  References for Pulse period,
+                                   in [lh]mxbrefs.dat files
+     289  A1    ---      ---     (])
+ 291-315  A25   ---      Cat     Survey catalogues and experiments in which the
+                                source was listed and detected, respectively (7)
+ 317-328  A12   ---      SpType  Spectral type
+ 330-342  A13   ---      Name2   Other name
+     343  A1    ---    u_Name2   [?] Uncertainty flag on Name2
+     344  A1    ---      ---     [,]
+ 345-359  A15   ---      Name3   Other name (8)
+--------------------------------------------------------------------------------
+Note (1): Source name, with rough information on its sky location according
+    to the convention hhmm+/-ddd. Here hh and mm indicate the hours and
+    minutes of right ascension, ddd the declination in units of 0.1 degree
+    (in a small number of cases, the coordinates shown in the name are
+    given with more, or fewer, digits). However, for a ROSAT source the
+    name is always given in the form of hhmm.m+/-ddmm. The prefix J
+    indicates a name based on J2000 coordinates. Otherwise, 1950
+    coordinates were used in the name.
+
+Note (2): Type:
+       P: X-ray pulsars
+       T: transient X-ray source
+       U: Ultra-soft X-ray spectrum These sources include black-hole
+           candidates; some 'extreme ultra-soft' (EUS) source may be white
+           dwarf (WD) on whose surface steady nuclear burning takes place.
+       V: variable
+       A: atoll source
+       B: X-ray burst source
+       D: "dipping" low-mass X-ray binary
+       G: globular-cluster X-ray source
+       Z: Z-type
+
+Note (3): o: optical; x: X-ray; r: radio; IR: infrared
+
+Note (4): We give an indication of the accuracy of this position, in the
+    form of equivalent (90 percent confidence level) error radii, but in
+    several cases this can only be considered an approximation (e.g. when
+    the error box is not circular). When no accuracy is quoted, it is
+    about one arcsecond or better.
+
+Note (5): Name of the optical counterpart.
+    An asterisk followed by a number or letter refers to star number used
+    in the finding chart; "star" refers a star in the finding chart that
+    has not been assigned a number or letter.
+
+Note (6): Individual notes for magnitudes:
+     In hmxb.dat:
+        J0529.8-6556: B=14.5,R=13.3
+        J0532.4-6535: J=11.9,H=11.1, K=10.7
+        2030+407    : I=20.0
+     In lmxb.dat:
+        1550-631  Bmag >=20.
+        1552-645  Bmag = 17.5
+        1636-550  Imag ~ 18.2
+        1756-365  Kmag = 15.1
+        J1810.8-2609: B=21.5, R=19.5
+        1811-171  Kmag = 12
+        1820-303  Bmag = 18.7
+        1837+049  Bmag = 19.2
+        1915+105  Imag = 23.4
+
+Note (7): Survey catalogues and experiments abbreviations:
+       A: Ariel V sky survey
+      AS: ASCA
+       B: BeppoSAX
+       C: Compton {gamma}-ray Observatory
+       E: Einstein Observatory
+     Exo: Exosat
+       G: Ginga
+      Gr: Granat
+       H: HEAO A-1 sky survey
+      Ha: Hakucho
+       I: Indian X-ray Astronomy Experiment (IXAE)
+       K: Kvant
+       M: Mit OSO-7 sky survey
+     OAO: Orbiting Astronomical Observatory
+       R: ROSAT
+       S: SAS 3
+      SL: Space Lab
+       T: Tenma
+       U: Uhuru sky survey
+       V: Vela-5 and -6 satellites
+       X: Rossi XTE
+
+Note (8): In hmxb.dat:
+     For 1258-613, No. 2 in Mason et al., 1978MNRAS.184P..45M
+     For 1538-522, No. 12 in Schwartz et al., 1978Natur.275..517S
+
+Note (9): The printed table gives positions in J2000 or B1950,
+           depending whether the source name stars by a 'J' or not.
+  (All positions were converted to J2000 in the electronic version at CDS)
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: [lh]mxbnote.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units   Label     Explanations
+--------------------------------------------------------------------------------
+   1- 16  A16   ---     Name      Source name
+  18- 80  A63   ---     Note      Text of the note (1)
+--------------------------------------------------------------------------------
+Note (1): The following abbreviations have been used:
+     o, optical; x, X-ray; r, radio; IR, infrared.
+     A reference on the source position is given under 'pos.'.
+     The references code are from [lh]mxbrefs.dat files
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: [lh]mxbrefs.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units   Label     Explanations
+--------------------------------------------------------------------------------
+   1-  4  I4    ---     Ref       Reference number
+       5  A1    ---   m_Ref       [abc] Multiplicity index on Ref for
+                                         associated reference
+   7- 25  A19   ---     BibCode   BibCode
+  27- 63  A37   ---     Aut       Author's name
+  64-176  A113  ---     Com       Comments
+--------------------------------------------------------------------------------
+
+Acknowledgements: Qingzhong Liu <qzliu@mail.pmo.ac.cn>
+================================================================================
+(End)                                         Patricia Bauer [CDS]   27-Mar-2001
