@@ -35,7 +35,7 @@ def catA(fname = ['hmxbcat.dat', 'lmxbcat.dat'], repDlm = [17, 24, 27, 30, 41, 4
         data[i] = temp
 
     for i in range(len(data)):
-        data[i] = np.array(data[i].split('$'))
+        data[i] = np.array([i.strip() for i in data[i].split('$')])
     
     return pd.DataFrame(data, columns = Fields).set_index(['Name'])
 
@@ -44,7 +44,7 @@ def catB(fname="AS_observations_cat_Sept2018.txt",length=900,Fields=['Id','DnT',
     data=[]
     with open(fname, "r") as f:
         for i in range(900):
-            data.append(re.split('\t|::|\n',f.readline())[:-1])
+            data.append([i.strip() for i in re.split('\t|::|\n',f.readline())[:-1]])
     return pd.DataFrame(data,columns=Fields).set_index(['Id'])
 
 def catC(fname="AS_publications2019-21.txt"):
