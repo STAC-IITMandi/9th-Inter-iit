@@ -20,7 +20,7 @@ def catA_json(Fields=['Type', 'RAh', 'RAm', 'RAs', 'DE-', 'DEd', 'DEm', 'DEs', '
     with open("Dataset.json", 'w') as f:
         json.dump(objects, f, indent=3)
     
-def catB_json(Fields=['Name','Ra','Dec']):
+def catB_json(Fields=['Name','Ra','Dec', 'ROSAT']):
     B=cat_functions.catB()
     data=[]
     for i in range(280):
@@ -37,7 +37,17 @@ def catC_json():
     publications=cat_functions.catC()
     with open("Astrosat_Pubs.json", 'w') as f:
         json.dump(publications, f, indent=3)
-        
+
+def BtoC_json():
+    B=json.load(open("Astrosat.json"))
+    C=json.load(open("Astrosat_Pubs.json"))
+    B = B['objects']
+    C = C['publications']
+    search=cat_functions.relateBtoC(B,C)
+    with open("BtoC.json", 'w') as f:
+        json.dump(search, f, indent=3)
+
 catA_json()
 catB_json()
 catC_json()
+BtoC_json()
