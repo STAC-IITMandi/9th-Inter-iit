@@ -5,6 +5,13 @@ const app = express();
 
 const PORT = 8080;
 
+
+app.set('view engine', 'ejs');
+
+app.get('/', (req, res) => {
+    res.render('index');
+});
+
 app.get('/coordinates', function (req, res) {
     fs.readFile( "./scripts/data/coordinates.json", 'utf8', function (err, data) {
         res.end(data);
@@ -34,5 +41,13 @@ app.get('/', function(request, response){
     response.sendFile('index.html', { root: __dirname + '/templates' });
 });
 
+app.set('view engine', 'ejs');
+app.get('/', (req, res) => {
+    res.render('index');
+});
+
+
 // app.listen(PORT, () => console.log(`App is live`) );
 app.listen(PORT, () => console.log(`App is live at http://127.0.0.1:${PORT}`));
+
+
