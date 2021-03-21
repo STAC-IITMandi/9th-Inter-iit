@@ -59,3 +59,29 @@ def catC(fname="AS_publications2019-21.txt"):
             data_dict[i].update({key : data[i][cell].lstrip().partition(':')[2].lstrip()})
     final_data = {'publications':data_dict}
     return final_data
+
+def relateBtoC(B, C):
+    """
+        Searches observations in B, and returns a dict of which source is in which publication.
+    """
+    my_search = dict()
+    for obj in B:
+        if obj:
+            name = obj['Name']
+            my_search[name] = []
+            for index, pub in enumerate(C):
+                if pub:
+                    searches = [str(i).lower() for i in [pub['Title'], pub['Keywords'], pub['Abstract']]]
+                    for s in searches:
+                        if name.lower() in s:
+                            # object exist
+                            my_search[name].append(index)
+                            break
+
+    final = []
+    for key, val in my_search.items():
+        if val != []:
+            final.append((key, val))
+    final = dict(final)
+    return final
+

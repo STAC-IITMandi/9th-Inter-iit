@@ -38,6 +38,16 @@ def catC_json():
     with open("Astrosat_Pubs.json", 'w') as f:
         json.dump(publications, f, indent=3)
         
+def BtoC_json():
+    B=json.load(open("Astrosat.json"))
+    C=json.load(open("Astrosat_Pubs.json"))
+    B = B['objects']
+    C = C['publications']
+    search=cat_functions.relateBtoC(B,C)
+    with open("BtoC.json", 'w') as f:
+        json.dump(search, f, indent=3)
+
 catA_json()
 catB_json()
 catC_json()
+BtoC_json()
