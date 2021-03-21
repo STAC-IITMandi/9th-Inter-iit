@@ -1,4 +1,4 @@
-const url = "./Dataset.json";
+const url = "/dataset";
 
 // Grid
 // right asc.
