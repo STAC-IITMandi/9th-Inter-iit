@@ -31,26 +31,21 @@ app.get('/plot.js', function(req, res) {
     });
 });
 
-app.get('/coordinates', function(req, res) {
-    fs.readFile("./scripts/data/coordinates.json", 'utf8', function(err, data) {
-        res.end(data);
-    });
-});
-
-app.get('/coordinates_info', function(req, res) {
-    fs.readFile("./scripts/data/coordinates_info.json", 'utf8', function(err, data) {
+//  apis
+app.get('/dataset', function(req, res) {
+    fs.readFile("./data/Dataset.json", 'utf8', function(err, data) {
         res.end(data);
     });
 });
 
 app.get('/astrosat_publications', function(req, res) {
-    fs.readFile("./scripts/data/Astrosat_Pubs.json", 'utf8', function(err, data) {
+    fs.readFile("./data/Astrosat_Pubs.json", 'utf8', function(err, data) {
         res.end(data);
     });
 });
 
 app.get('/astrosat', function(req, res) {
-    fs.readFile("./scripts/data/Astrosat.json", 'utf8', function(err, data) {
+    fs.readFile("./data/Astrosat.json", 'utf8', function(err, data) {
         res.end(data);
     });
 });
