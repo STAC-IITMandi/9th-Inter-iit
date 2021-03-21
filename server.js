@@ -1,7 +1,6 @@
 var http = require('http');
 var fs = require('fs');
 const express = require('express');
-// const { spawn } = require('child_process');
 const app = express();
 
 const PORT = 8080;
@@ -18,34 +17,24 @@ app.get('/script.js', function(req, res) {
     });
 });
 
-// app.set('view engine', 'ejs');
-
-// app.get('/', (req, res) => {
-//     var plot_id;
-//     const python = spawn('python3', ['./scripts/plot.py']);
-//     python.stdout.on('data', function(data) {
-//         plot_id = data.toString();
-//         console.log(`Retreiving stdout output of plot.py ${plot_id}`);
-//         console.log(JSON.stringify(plot_id.replace(/\n/g, '')));
-//         res.render('index', {
-//             fid: plot_id.replace(/\n/g, '')
-//         });
-//     });
-//     python.on('close', (code) => {
-//         console.log(`child process close all stdio with code ${code}`);
-//     });
-// });
-
-// app.get('/plot.js', function(req, res) {
-//     fs.readFile("./plot.js", 'utf8', function(err, data) {
-//         res.end(data);
-//     });
-// });
-
 //  apis
 app.get('/dataset', function(req, res) {
     fs.readFile("./data/Dataset.json", 'utf8', function(err, data) {
-        res.end(data);
+        if (err) throw err;
+        if (req.query.glat && req.query.glon) {
+            all_objects = JSON.parse(data);
+            var lat = parseFloat(req.query.glat);
+            var lon = parseFloat(req.query.glon);
+            // console.log(lat, lon);
+            all_objects.objects.forEach(function(obj) {
+                if (parseFloat(obj.GLAT) == lat && parseFloat(obj.GLON) - 180 + 180.0 == lon) {
+                    // console.log(obj);
+                    res.json(obj);
+                }
+            });
+        } else {
+            res.end(data);
+        }
     });
 });
 

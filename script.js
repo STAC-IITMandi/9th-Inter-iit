@@ -103,8 +103,8 @@ Plotly.d3.json(url, function(figure) {
             mode: "markers",
             name: "Sources (Not observed by Astrosat)",
             type: "scattergeo",
-            lon: unpack(not_astro, "GLON"),
-            lat: unpack(not_astro, "GLAT"),
+            lon: unpack_glon(not_astro, "GLON"),
+            lat: unpack_glat(not_astro, "GLAT"),
             customdata: unpack(not_astro, "Astrosat_obs"),
             text: unpack(not_astro, "type"),
             text: unpack(not_astro, "Name"),
@@ -112,7 +112,7 @@ Plotly.d3.json(url, function(figure) {
             marker: {
                 symbol: "star",
                 size: 8,
-                color: '#888888',
+                color: '#85c1e9 ',
             },
         },
         {
@@ -177,7 +177,7 @@ Plotly.d3.json(url, function(figure) {
         },
         yaxis: { title: "LAT" },
         xaxis: { title: "LON" },
-        autosize: true,
+        // autosize: true,
     };
 
     var config = { responsive: true }
@@ -185,10 +185,37 @@ Plotly.d3.json(url, function(figure) {
     Plotly.plot(graph, trace, layout, config, {
         displayModeBar: true,
         showlegend: true,
+        legend: {
+            x: 1,
+            y: 0.5
+        }
     });
 
     graph.on('plotly_click', function(data) {
-        console.log(data.points[0].text);
+        fetch(url + "?glat=" + data.points[0].lat + "&glon=" + (data.points[0].lon + 180.0)).then(response => {
+            return response.json()
+        }).then(function(data) {
+            const data_div = document.getElementById("showdata");
+            while (data_div.firstChild) {
+                data_div.removeChild(data_div.lastChild);
+            }
+            let ele1 = document.createElement("div");
+            ele1.className += "col-sm text-center";
+            let ele2 = document.createElement("h5");
+            ele2.innerHTML = "Download Data for " + data.Name;
+            let ele3 = document.createElement("div");
+            ele3.className += "col-sm text-center";
+            data_div.appendChild(ele1).appendChild(ele2);
+
+
+            var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
+            var downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", data.Name + ".json");
+            downloadAnchorNode.innerHTML = "json format";
+            ele3.appendChild(downloadAnchorNode); // required for firefox
+            data_div.appendChild(ele3);
+        });
     });
 });
 
