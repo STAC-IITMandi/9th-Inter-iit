@@ -23,7 +23,7 @@ def catA_json(Fields=['Type', 'RAh', 'RAm', 'RAs', 'DE-', 'DEd', 'DEm', 'DEs', '
 def catB_json(Fields=['Name','Ra','Dec']):
     B=cat_functions.catB()
     data=[]
-    for i in range(280):
+    for i in range(900):
         data.append({})
         for field in Fields:
             data[-1].update({field: B[field][i]})
