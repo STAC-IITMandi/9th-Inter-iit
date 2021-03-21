@@ -202,23 +202,38 @@ Plotly.d3.json(url, function(figure) {
             let ele1 = document.createElement("div");
             ele1.className += "col-sm text-center";
             let ele2 = document.createElement("h5");
-            ele2.innerHTML = "Download Data for " + data.Name;
+            ele2.innerHTML = "Data for " + data.Name;
             let ele3 = document.createElement("div");
             ele3.className += "col-sm text-center";
             data_div.appendChild(ele1).appendChild(ele2);
 
 
             var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
-            var downloadAnchorNode = document.createElement('a');
-            downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", data.Name + ".json");
-            downloadAnchorNode.innerHTML = "json format";
-            ele3.appendChild(downloadAnchorNode); // required for firefox
-            data_div.appendChild(ele3);
+            // var downloadAnchorNode = document.createElement('a');
+            // downloadAnchorNode.setAttribute("href", dataStr);
+            // downloadAnchorNode.setAttribute("download", data.Name + ".json");
+            // downloadAnchorNode.innerHTML = "json format";
+            // ele3.appendChild(downloadAnchorNode); // required for firefox
+            // data_div.appendChild(ele3);
+
+            // information table
+            console.log("DATA",data)
+            const data_keys =["Name", "GLON", "GLAT", "Astrosat_obs"];
+            for(let q = 0; q<(data_keys.length); q++){
+                table_info(data_keys[q], data); 
+            }
+            let link = document.getElementById(`info_Download`);
+            link.href= dataStr;
+            link.setAttribute("download", data.Name + ".json");
+            link.innerHTML= "JSON FORMAT";
+            document.getElementById("info_table").hidden=false;
         });
     });
 });
 
+function table_info(value, response){
+    document.getElementById(`info_${value}`).innerHTML=eval(`response.${value}`);
+}
 
 function showMenu(e) {
     var menu = document.getElementById("contextMenu");
