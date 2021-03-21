@@ -71,6 +71,29 @@
     </div>
     <div id="graph"></div>
     <div id="showdata"></div>
+
+    <div class="container" id="info_table" hidden>
+        <table  class="table table-bordered table-striped">
+        <thead class= "thead-dark">
+        <tr>
+          <th>Name</th>
+          <th>GLON</th>
+          <th>GLAT </th>
+          <th>Astrosat Observed</th>
+          <th>Download Data</th>
+        </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td id="info_Name"></td>
+            <td id="info_GLON"></td>
+            <td id="info_GLAT"></td>
+            <td id="info_Astrosat_obs"></td>
+            <td><a id="info_Download"></a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     </div>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="script.js"></script>
