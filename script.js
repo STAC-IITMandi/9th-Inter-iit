@@ -207,14 +207,13 @@ Plotly.d3.json(url, function(figure) {
             ele3.className += "col-sm text-center";
             data_div.appendChild(ele1).appendChild(ele2);
 
-            var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
-
             // information table
             const data_keys =["Name", "GLON", "GLAT", "Astrosat_obs"];
 
             for (let key of data_keys) {
                 table_info(key, data);
             }
+            document.getElementById("info_table").hidden = false;
 
             $("#download_json").off().on("click", () => {    
                 const fileName = `${data["Name"]}.json`;            
@@ -226,7 +225,6 @@ Plotly.d3.json(url, function(figure) {
                 // Save the file
                 saveAs(fileToSave, fileName);
             });
-            document.getElementById("info_table").hidden = false;
 
             $("#download_pdf").off().on("click", () => {
                 // PDF mode
