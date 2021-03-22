@@ -10,36 +10,7 @@
         body {
             background-color: #ebf5fb;
         }
-        
-        .context-menu {
-            position: absolute;
-            text-align: center;
-            background: lightgray;
-            border: 1px solid black;
-        }
-        
-        .context-menu ul {
-            padding: 0px;
-            margin: 0px;
-            min-width: 150px;
-            list-style: none;
-        }
-        
-        .context-menu ul li {
-            padding-bottom: 7px;
-            padding-top: 7px;
-            border: 1px solid black;
-        }
-        
-        .context-menu ul li a {
-            text-decoration: none;
-            color: black;
-        }
-        
-        .context-menu ul li:hover {
-            background: darkgray;
-        }
-        
+
         h1 {
             color: #34568B;
             font-family: 'Chango', cursive;
@@ -60,6 +31,7 @@
     <!-- jsPDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
     <script src="https://unpkg.com/jspdf-autotable@2.3.2"></script>
+    <!-- FileSaver -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 </head>
 
@@ -78,25 +50,25 @@
 
     <div class="container" id="info_table" hidden>
         <table class="table table-bordered table-striped">
-        <thead class= "thead-dark">
-        <tr>
-          <th>Name</th>
-          <th>GLON</th>
-          <th>GLAT </th>
-          <th>Astrosat Observed</th>
-          <th>Download Data</th>
-        </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td id="info_Name"></td>
-            <td id="info_GLON"></td>
-            <td id="info_GLAT"></td>
-            <td id="info_Astrosat_obs"></td>
-            <td><button id="download_json">JSON Format</button> <button id="download_pdf">PDF Format</button></td>
-          </tr>
-        </tbody>
-      </table>
+            <thead class="thead-dark">
+            <tr>
+                <th>Name</th>
+                <th>GLON</th>
+                <th>GLAT </th>
+                <th>Astrosat Observed</th>
+                <th>Download Data</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td id="info_Name"></td>
+                <td id="info_GLON"></td>
+                <td id="info_GLAT"></td>
+                <td id="info_Astrosat_obs"></td>
+                <td><button id="download_json">JSON Format</button> <button id="download_pdf">PDF Format</button></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
     </div>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
