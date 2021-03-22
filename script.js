@@ -6,17 +6,18 @@ const grid_ra_x = [-180, -150, -120, -90, -60, -30, 0, 30, 60, 90, 120, 150, 180
 const grid_ra_y = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 const grid_ra_hovtext = [
     "180°",
-    "210°",
-    "240°",
-    "270°",
-    "300°",
-    "330°",
+    "-150°",
+    "-120°",
+    "-90°",
+    "-60°",
+    "-30°",
     "0°",
     "30°",
     "60°",
     "90°",
     "120°",
     "150°",
+    "180°",
 ];
 
 const grid_ra_textposition = [
@@ -65,24 +66,17 @@ Plotly.d3.json(url, function(figure) {
 
     function unpack_glon(rows, key) {
         return rows.map(function(row) {
-            return parseFloat(row[key]) - 180.0;
+            let current_lon = parseFloat(row[key]);
+            if (current_lon > 180.0) {
+                current_lon -= 360.0;
+            }
+            return current_lon;
         });
     }
 
-    const data = figure.objects;
-    let astro = [];
-    let not_astro = [];
+    let {astro, not_astro} = figure;
 
-    for (let d of data) {
-        if (d["Astrosat_obs"] == "Yes") {
-            astro.push(d);
-        } else {
-            not_astro.push(d);
-        }
-    }
-
-    let hover_template =
-        "Lon: %{lon}<br>Lat: %{lat}<br>Name: %{text}<br>Astro: %{customdata}<br>Type: %{text}";
+    const hover_template = "Lon: %{lon}<br>Lat: %{lat}<br>Name: %{text}<br>Astro: %{customdata}<br>Type: %{text}";
 
     let trace = [{
             mode: "markers",
@@ -194,7 +188,8 @@ Plotly.d3.json(url, function(figure) {
     });
 
     graph.on('plotly_click', function(data) {
-        fetch(url + "?glat=" + data.points[0].lat + "&glon=" + (data.points[0].lon + 180.0)).then(response => {
+        const {curveNumber, pointNumber} = data.points[0];
+        fetch(url + "?trace=" + curveNumber + "&point=" + pointNumber).then(response => {
             return response.json()
         }).then(function(data) {
             const data_div = document.getElementById("showdata");

@@ -1,9 +1,19 @@
-var http = require('http');
-var fs = require('fs');
-const express = require('express');
+const fs = require('fs');
+const express = require('express')
 const app = express();
 
 const PORT = 8080;
+const Dataset = JSON.parse(fs.readFileSync("./data/Dataset.json", 'utf8'));
+let astro = [],
+    not_astro = [];
+
+for (let d of Dataset.objects) {
+    if (d["Astrosat_obs"] == "Yes") {
+        astro.push(d);
+    } else {
+        not_astro.push(d);
+    }
+}
 
 app.get("/", (req, res) => {
     fs.readFile('index.html', 'utf8', function(err, data) {
@@ -19,23 +29,25 @@ app.get('/script.js', function(req, res) {
 
 //  apis
 app.get('/dataset', function(req, res) {
-    fs.readFile("./data/Dataset.json", 'utf8', function(err, data) {
-        if (err) throw err;
-        if (req.query.glat && req.query.glon) {
-            all_objects = JSON.parse(data);
-            var lat = parseFloat(req.query.glat);
-            var lon = parseFloat(req.query.glon);
-            // console.log(lat, lon);
-            all_objects.objects.forEach(function(obj) {
-                if (parseFloat(obj.GLAT) == lat && parseFloat(obj.GLON) - 180 + 180.0 == lon) {
-                    // console.log(obj);
-                    res.json(obj);
-                }
-            });
-        } else {
-            res.end(data);
+    if (Object.keys(req.query).length !== 0 ) {
+        console.log('received trace and index');
+        let {trace, point} =  req.query;
+        trace = parseInt(trace);
+        point = parseInt(point);
+        if (trace === 0)  {
+            res.json(astro[point]);
         }
-    });
+        else if (trace === 1) {
+            res.json(not_astro[point]);
+        }
+        else {
+            throw "Invalid trace";
+        }
+    }
+    else {
+        console.log(`sent all data`);
+        res.json({"astro" : astro, "not_astro" : not_astro});
+    }
 });
 
 app.get('/astrosat_publications', function(req, res) {
