@@ -57,6 +57,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <!-- fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Chango&display=swap" rel="stylesheet">
+    <!-- jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+    <script src="https://unpkg.com/jspdf-autotable@2.3.2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 </head>
 
 <body>
@@ -73,7 +77,7 @@
     <div id="showdata"></div>
 
     <div class="container" id="info_table" hidden>
-        <table  class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped">
         <thead class= "thead-dark">
         <tr>
           <th>Name</th>
@@ -89,7 +93,7 @@
             <td id="info_GLON"></td>
             <td id="info_GLAT"></td>
             <td id="info_Astrosat_obs"></td>
-            <td><a id="info_Download"></a></td>
+            <td><button id="download_json">JSON Format</button> <button id="download_pdf">PDF Format</button></td>
           </tr>
         </tbody>
       </table>

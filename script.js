@@ -6,17 +6,17 @@ const grid_ra_x = [-180, -150, -120, -90, -60, -30, 0, 30, 60, 90, 120, 150, 180
 const grid_ra_y = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 const grid_ra_hovtext = [
     "180°",
-    "150°",
-    "120°",
-    "90°",
-    "60°",
-    "30°",
-    "0°",
-    "330°",
-    "300°",
-    "270°",
-    "240°",
     "210°",
+    "240°",
+    "270°",
+    "300°",
+    "330°",
+    "0°",
+    "30°",
+    "60°",
+    "90°",
+    "120°",
+    "150°",
 ];
 
 const grid_ra_textposition = [
@@ -94,6 +94,7 @@ Plotly.d3.json(url, function(figure) {
             typ: unpack(astro, "Type"),
             text: unpack(astro, "Name"),
             hovertemplate: hover_template,
+            hoverlabel: { namelength: 0 },
             marker: {
                 symbol: "star",
                 size: 8,
@@ -109,6 +110,7 @@ Plotly.d3.json(url, function(figure) {
             text: unpack(not_astro, "type"),
             text: unpack(not_astro, "Name"),
             hovertemplate: hover_template,
+            hoverlabel: { namelength: 0 },
             marker: {
                 symbol: "star",
                 size: 8,
@@ -217,50 +219,40 @@ Plotly.d3.json(url, function(figure) {
             // data_div.appendChild(ele3);
 
             // information table
-            console.log("DATA",data)
+            console.log("DATA",data);
             const data_keys =["Name", "GLON", "GLAT", "Astrosat_obs"];
             for(let q = 0; q<(data_keys.length); q++){
                 table_info(data_keys[q], data); 
             }
-            let link = document.getElementById(`info_Download`);
-            link.href= dataStr;
-            link.setAttribute("download", data.Name + ".json");
-            link.innerHTML= "JSON FORMAT";
+
+            $("#download_json").click(() => {    
+                const fileName = `${data["Name"]}.json`;            
+                // Create a blob of the data
+                var fileToSave = new Blob([JSON.stringify(data)], {
+                    type: 'application/json',
+                    name: fileName
+                });
+                
+                // Save the file
+                saveAs(fileToSave, fileName);
+            });
             document.getElementById("info_table").hidden=false;
+
+            $("#download_pdf").click(() => {
+                // PDF mode
+                const doc = new jsPDF();
+                let col = ["Property", "Value"], 
+                    row = [];
+                for (let key in data) {
+                    row.push([key, data[key]]);
+                }
+                doc.autoTable(col, row);
+                doc.save(`${data["Name"]}.pdf`);
+            })
         });
     });
 });
 
 function table_info(value, response){
-    document.getElementById(`info_${value}`).innerHTML=eval(`response.${value}`);
+    document.getElementById(`info_${value}`).innerHTML=response[value];
 }
-
-function showMenu(e) {
-    var menu = document.getElementById("contextMenu");
-    menu.style.display = "block";
-    menu.style.left = e.pageX + "px";
-    menu.style.top = e.pageY + "px";
-}
-
-function hideMenu() {
-    document.getElementById("contextMenu").style.display = "none";
-}
-
-document
-    .querySelector("#graph")
-    .addEventListener("contextmenu", function(event) {
-        event.preventDefault();
-        console.log(event);
-        if (document.getElementById("contextMenu").style.display == "block") {
-            hideMenu();
-        } else {
-            showMenu(event);
-        }
-    });
-
-document.querySelector("#graph").addEventListener("keydown", (e) => {
-    console.log(e);
-    //   if (e.key === "Esc") {
-    //     hideMenu();
-    //   }
-});
