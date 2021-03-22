@@ -4,14 +4,17 @@ const app = express();
 
 const PORT = 8080;
 const Dataset = JSON.parse(fs.readFileSync("./data/Dataset.json", 'utf8'));
+const Publications = JSON.parse(fs.readFileSync("./data/Astrosat_Pubs.json", 'utf8'));
+const Astrosat_Data = JSON.parse(fs.readFileSync("./data/Astrosat.json", 'utf8'));
+
 let astro = [],
     not_astro = [];
 
-for (let d of Dataset.objects) {
-    if (d["Astrosat_obs"] == "Yes") {
-        astro.push(d);
+for (let obj of Dataset.objects) {
+    if (obj["Astrosat_obs"] == "Yes") {
+        astro.push(obj);
     } else {
-        not_astro.push(d);
+        not_astro.push(obj);
     }
 }
 
@@ -51,15 +54,11 @@ app.get('/dataset', function(req, res) {
 });
 
 app.get('/astrosat_publications', function(req, res) {
-    fs.readFile("./data/Astrosat_Pubs.json", 'utf8', function(err, data) {
-        res.end(data);
-    });
+    
 });
 
 app.get('/astrosat', function(req, res) {
-    fs.readFile("./data/Astrosat.json", 'utf8', function(err, data) {
-        res.end(data);
-    });
+    
 });
 
 app.listen(PORT, () => console.log(`App is live at http://127.0.0.1:${PORT}`));

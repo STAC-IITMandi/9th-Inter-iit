@@ -173,6 +173,9 @@ Plotly.d3.json(url, function(figure) {
         },
         yaxis: { title: "LAT" },
         xaxis: { title: "LON" },
+        font: {
+            size: 18
+        }
         // autosize: true,
     };
 
@@ -190,7 +193,7 @@ Plotly.d3.json(url, function(figure) {
     graph.on('plotly_click', function(data) {
         const {curveNumber, pointNumber} = data.points[0];
         fetch(url + "?trace=" + curveNumber + "&point=" + pointNumber).then(response => {
-            return response.json()
+            return response.json();
         }).then(function(data) {
             const data_div = document.getElementById("showdata");
             while (data_div.firstChild) {
@@ -204,34 +207,24 @@ Plotly.d3.json(url, function(figure) {
             ele3.className += "col-sm text-center";
             data_div.appendChild(ele1).appendChild(ele2);
 
-
-            var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
-            // var downloadAnchorNode = document.createElement('a');
-            // downloadAnchorNode.setAttribute("href", dataStr);
-            // downloadAnchorNode.setAttribute("download", data.Name + ".json");
-            // downloadAnchorNode.innerHTML = "json format";
-            // ele3.appendChild(downloadAnchorNode); // required for firefox
-            // data_div.appendChild(ele3);
-
             // information table
-            console.log("DATA",data);
             const data_keys =["Name", "GLON", "GLAT", "Astrosat_obs"];
-            for(let q = 0; q<(data_keys.length); q++){
-                table_info(data_keys[q], data); 
+
+            for (let key of data_keys) {
+                table_info(key, data);
             }
+            document.getElementById("info_table").hidden = false;
 
             $("#download_json").off().on("click", () => {    
                 const fileName = `${data["Name"]}.json`;            
                 // Create a blob of the data
-                var fileToSave = new Blob([JSON.stringify(data)], {
+                let fileToSave = new Blob([JSON.stringify(data)], {
                     type: 'application/json',
                     name: fileName
-                });
-                
+                }); 
                 // Save the file
                 saveAs(fileToSave, fileName);
             });
-            document.getElementById("info_table").hidden=false;
 
             $("#download_pdf").off().on("click", () => {
                 // PDF mode
