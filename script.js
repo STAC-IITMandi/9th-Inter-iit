@@ -225,7 +225,7 @@ Plotly.d3.json(url, function(figure) {
                 table_info(data_keys[q], data); 
             }
 
-            $("#download_json").click(() => {    
+            $("#download_json").off().on("click", () => {    
                 const fileName = `${data["Name"]}.json`;            
                 // Create a blob of the data
                 var fileToSave = new Blob([JSON.stringify(data)], {
@@ -238,7 +238,7 @@ Plotly.d3.json(url, function(figure) {
             });
             document.getElementById("info_table").hidden=false;
 
-            $("#download_pdf").click(() => {
+            $("#download_pdf").off().on("click", () => {
                 // PDF mode
                 const doc = new jsPDF();
                 let col = ["Property", "Value"], 
