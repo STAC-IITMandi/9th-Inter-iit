@@ -33,6 +33,8 @@
     <script src="https://unpkg.com/jspdf-autotable@2.3.2"></script>
     <!-- FileSaver -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <!-- json2csv -->
+    <script src="https://cdn.jsdelivr.net/npm/json2csv"></script>
 </head>
 
 <body>
@@ -65,7 +67,11 @@
                 <td id="info_GLON"></td>
                 <td id="info_GLAT"></td>
                 <td id="info_Astrosat_obs"></td>
-                <td><button id="download_json">JSON Format</button> <button id="download_pdf">PDF Format</button></td>
+                <td>
+                    <button id="download_json">JSON Format</button>
+                    <button id="download_pdf">PDF Format</button>
+                    <button id="download_csv">CSV Format</button>
+                </td>
             </tr>
             </tbody>
         </table>

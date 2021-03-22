@@ -1,4 +1,5 @@
 const url = "/dataset";
+const { Parser } = window.json2csv;
 
 // Grid
 // right asc.
@@ -237,10 +238,21 @@ Plotly.d3.json(url, function(figure) {
                 doc.autoTable(col, row);
                 doc.save(`${data["Name"]}.pdf`);
             })
+
+            $("#download_csv").off().on("click", () => {
+                // CSV
+                const fileName = `${data["Name"]}.csv`;
+                const csv = json2csv.parse( [data], Object.keys(data))
+                const csv_data = new Blob([csv], {
+                    type: 'text/plain;charset=utf-8',
+                    name: fileName
+                });
+                saveAs(csv_data, fileName);
+                });
+            })
         });
-    });
 });
 
 function table_info(value, response){
-    document.getElementById(`info_${value}`).innerHTML=response[value];
+    document.getElementById(`info_${value}`).innerHTML = response[value];
 }
