@@ -18,7 +18,7 @@ let astro = [],
     not_astro = [];
 
 // extracting Astrosat observed as "astro" and not observed as "not_astro" data separately.
-for (let obj of Dataset.objects) {
+for (let obj of Dataset) {
     if (obj["Astrosat_obs"] == "Yes") {
         astro.push(obj);
     } else {
@@ -40,7 +40,7 @@ app.get('/script.js', function(req, res) {
     });
 });
 
-// renderind /dataset api
+// rendering /dataset api
 app.get('/dataset', function(req, res) {
     if (Object.keys(req.query).length !== 0) {
         console.log('received trace and index');

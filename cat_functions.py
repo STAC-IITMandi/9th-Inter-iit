@@ -106,7 +106,7 @@ def MatchingBtoA(A, B):
         for d2 in B:            
             if float(d1['GLON']) == float(d2['glon']) and float(d1['GLAT']) == float(d2['glat']):
                 d1['Astrosat_obs'] ='Yes'
-                d1['Name 2'] = d2['Source_Name']
+                d1['Source Name'] = d2['Source_Name']
                 d1['Astrosat Instrument'] = d2['Instrument']
                 d1['Date and Time'] = d2['DnT']
                 d1['Observation_Id'] = d2['Observation_Id']
