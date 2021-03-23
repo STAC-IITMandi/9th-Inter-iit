@@ -56,18 +56,16 @@ app.get('/dataset', function(req, res) {
             fetch(URL + '/b2c' + '?index=' + `${pointIndex}`)
             .then(response => response.json())
             .then((data) => {
-                console.log(data);
                 if (data.flag === true) {
                     const indexes_ = data.indexes;
                     console.log(`indexes ${indexes_}`);
-                    // console.log(Publications);
                     for (let i in indexes_) {
-                        console.log(Publications[i]);
                         to_send.publications.push(Publications[i]);
                     }
                 }
-            });
+            console.log(to_send);
             res.json(to_send);
+            });
         } else if (traceIndex === 1) {
             res.json({ source_data: not_astro[pointIndex]});
         } else {

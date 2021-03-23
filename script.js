@@ -215,7 +215,8 @@ Plotly.d3.json(url, function (figure) {
                 return response.json();
             })
             .then(function (response) {
-                const { source_data } = response;
+                const {source_data, publications} = response;
+                console.log(publications);
                 const data_div = document.getElementById("showdata");
                 while (data_div.firstChild) {
                     data_div.removeChild(data_div.lastChild);
@@ -235,12 +236,6 @@ Plotly.d3.json(url, function (figure) {
                     table_info(key, source_data);
                 }
                 document.getElementById("info_table").hidden = false;
-
-                console.log(response);
-                if (source_data["Astrosat_obs"] === "yes") {
-                    const {indexes } = response;
-                    console.log(`publications : ${indexes}`);
-                }
 
                 $("#download_json")
                     .off()
