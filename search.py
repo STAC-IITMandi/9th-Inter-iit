@@ -10,4 +10,4 @@ def search(text, file="data/Astrosat_Pubs.json"):
                   break
      return L
          
-print(search("NGC 2420"))
+#print(search("NGC 2420"))
