@@ -3,7 +3,21 @@ const { Parser } = window.json2csv;
 
 // Grid
 // right asc.
-const grid_ra_x = [-180, -150, -120, -90, -60, -30, 0, 30, 60, 90, 120, 150, 180];
+const grid_ra_x = [
+    -180,
+    -150,
+    -120,
+    -90,
+    -60,
+    -30,
+    0,
+    30,
+    60,
+    90,
+    120,
+    150,
+    180,
+];
 const grid_ra_y = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 const grid_ra_hovtext = [
     "180°",
@@ -50,23 +64,23 @@ const grid_dec_textposition = [
     "bottom center",
 ];
 
-var graph = document.getElementById("graph");
+let graph = document.getElementById("graph");
 
-Plotly.d3.json(url, function(figure) {
+Plotly.d3.json(url, function (figure) {
     function unpack(rows, key) {
-        return rows.map(function(row) {
+        return rows.map(function (row) {
             return row[key];
         });
     }
 
     function unpack_glat(rows, key) {
-        return rows.map(function(row) {
+        return rows.map(function (row) {
             return parseFloat(row[key]);
         });
     }
 
     function unpack_glon(rows, key) {
-        return rows.map(function(row) {
+        return rows.map(function (row) {
             let current_lon = parseFloat(row[key]);
             if (current_lon > 180.0) {
                 current_lon -= 360.0;
@@ -75,11 +89,13 @@ Plotly.d3.json(url, function(figure) {
         });
     }
 
-    let {astro, not_astro} = figure;
+    let { astro, not_astro } = figure;
 
-    const hover_template = "Lon: %{lon}<br>Lat: %{lat}<br>Name: %{text}<br>Astro: %{customdata}<br>Type: %{text}";
+    const hover_template =
+        "Lon: %{lon}<br>Lat: %{lat}<br>Name: %{text}<br>Astro: %{customdata}<br>Type: %{text}";
 
-    let trace = [{
+    let trace = [
+        {
             mode: "markers",
             name: "Sources (Observed by AstroSat)",
             type: "scattergeo",
@@ -109,7 +125,7 @@ Plotly.d3.json(url, function(figure) {
             marker: {
                 symbol: "star",
                 size: 8,
-                color: '#85c1e9 ',
+                color: "#85c1e9 ",
             },
         },
         {
@@ -175,84 +191,92 @@ Plotly.d3.json(url, function(figure) {
         yaxis: { title: "LAT" },
         xaxis: { title: "LON" },
         font: {
-            size: 18
-        }
+            size: 24,
+        },
         // autosize: true,
     };
 
-    var config = { responsive: true }
+    var config = { responsive: true };
 
     Plotly.plot(graph, trace, layout, config, {
         displayModeBar: true,
         showlegend: true,
         legend: {
             x: 1,
-            y: 0.5
-        }
+            y: 0.5,
+        },
     });
 
-    graph.on('plotly_click', function(data) {
-        const {curveNumber, pointNumber} = data.points[0];
-        fetch(url + "?trace=" + curveNumber + "&point=" + pointNumber).then(response => {
-            return response.json();
-        }).then(function(data) {
-            const data_div = document.getElementById("showdata");
-            while (data_div.firstChild) {
-                data_div.removeChild(data_div.lastChild);
-            }
-            let ele1 = document.createElement("div");
-            ele1.className += "col-sm text-center";
-            let ele2 = document.createElement("h5");
-            ele2.innerHTML = "Data for " + data.Name;
-            let ele3 = document.createElement("div");
-            ele3.className += "col-sm text-center";
-            data_div.appendChild(ele1).appendChild(ele2);
-
-            // information table
-            const data_keys =["Name", "GLON", "GLAT", "Astrosat_obs"];
-
-            for (let key of data_keys) {
-                table_info(key, data);
-            }
-            document.getElementById("info_table").hidden = false;
-
-            $("#download_json").off().on("click", () => {    
-                const fileName = `${data["Name"]}.json`;            
-                // Create a blob of the data
-                let fileToSave = new Blob([JSON.stringify(data)], {
-                    type: 'application/json',
-                    name: fileName
-                }); 
-                // Save the file
-                saveAs(fileToSave, fileName);
-            });
-
-            $("#download_pdf").off().on("click", () => {
-                // PDF mode
-                const doc = new jsPDF();
-                let col = ["Property", "Value"], 
-                    row = [];
-                for (let key in data) {
-                    row.push([key, data[key]]);
+    graph.on("plotly_click", function (data) {
+        const { curveNumber, pointNumber } = data.points[0];
+        fetch(url + "?trace=" + curveNumber + "&point=" + pointNumber)
+            .then((response) => {
+                return response.json();
+            })
+            .then(function (data) {
+                const data_div = document.getElementById("showdata");
+                while (data_div.firstChild) {
+                    data_div.removeChild(data_div.lastChild);
                 }
-                doc.autoTable(col, row);
-                doc.save(`${data["Name"]}.pdf`);
-            })
+                let ele1 = document.createElement("div");
+                ele1.className += "col-sm text-center";
+                let ele2 = document.createElement("h5");
+                ele2.innerHTML = "Data for " + data.Name;
+                let ele3 = document.createElement("div");
+                ele3.className += "col-sm text-center";
+                data_div.appendChild(ele1).appendChild(ele2);
 
-            $("#download_csv").off().on("click", () => {
-                // CSV
-                const fileName = `${data["Name"]}.csv`;
-                const csv = json2csv.parse( [data], Object.keys(data))
-                const csv_data = new Blob([csv], {
-                    type: 'text/plain;charset=utf-8',
-                    name: fileName
-                });
-                saveAs(csv_data, fileName);
-                });
-            })
-        });
+                // information table
+                const data_keys = ["Name", "GLON", "GLAT", "Astrosat_obs"];
+
+                for (let key of data_keys) {
+                    table_info(key, data);
+                }
+                document.getElementById("info_table").hidden = false;
+
+                $("#download_json")
+                    .off()
+                    .on("click", () => {
+                        const fileName = `${data["Name"]}.json`;
+                        // Create a blob of the data
+                        let fileToSave = new Blob([JSON.stringify(data)], {
+                            type: "application/json",
+                            name: fileName,
+                        });
+                        // Save the file
+                        saveAs(fileToSave, fileName);
+                    });
+
+                $("#download_pdf")
+                    .off()
+                    .on("click", () => {
+                        // PDF mode
+                        const doc = new jsPDF();
+                        let col = ["Property", "Value"],
+                            row = [];
+                        for (let key in data) {
+                            row.push([key, data[key]]);
+                        }
+                        doc.autoTable(col, row);
+                        doc.save(`${data["Name"]}.pdf`);
+                    });
+
+                $("#download_csv")
+                    .off()
+                    .on("click", () => {
+                        // CSV
+                        const fileName = `${data["Name"]}.csv`;
+                        const csv = json2csv.parse([data], Object.keys(data));
+                        const csv_data = new Blob([csv], {
+                            type: "text/plain;charset=utf-8",
+                            name: fileName,
+                        });
+                        saveAs(csv_data, fileName);
+                    });
+            });
+    });
 });
 
-function table_info(value, response){
+function table_info(value, response) {
     document.getElementById(`info_${value}`).innerHTML = response[value];
 }
