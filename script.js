@@ -69,6 +69,7 @@ let graph = document.getElementById("graph");
 Plotly.d3.json(url, function (figure) {
     function unpack(rows, key) {
         return rows.map(function (row) {
+            // console.log("in unpack",row);
             return row[key];
         });
     }
@@ -91,9 +92,8 @@ Plotly.d3.json(url, function (figure) {
 
     let { astro, not_astro } = figure;
 
-    const hover_template =
-        "Lon: %{lon}<br>Lat: %{lat}<br>Name: %{text}<br>Astro: %{customdata}<br>Type: %{text}";
-
+    let hover_template =
+        "Lon: %{lon}<br>Lat: %{lat}<br>Name: %{text}<br>Astro: %{customdata}";
     let trace = [
         {
             mode: "markers",
@@ -102,13 +102,13 @@ Plotly.d3.json(url, function (figure) {
             lon: unpack_glon(astro, "GLON"), // calling unpack_glon function 
             lat: unpack_glat(astro, "GLAT"), // calling unpack_glat function 
             customdata: unpack(astro, "Astrosat_obs"),
-            typ: unpack(astro, "Type"),
             text: unpack(astro, "Name"),
             hovertemplate: hover_template,
             hoverlabel: { namelength: 0 },
             marker: {
                 symbol: "star",
                 size: 8,
+                color:"black",
             },
         },
         {
@@ -118,7 +118,6 @@ Plotly.d3.json(url, function (figure) {
             lon: unpack_glon(not_astro, "GLON"), // calling unpack_glon function
             lat: unpack_glat(not_astro, "GLAT"), // calling unpack_glat function
             customdata: unpack(not_astro, "Astrosat_obs"),
-            text: unpack(not_astro, "type"),
             text: unpack(not_astro, "Name"),
             hovertemplate: hover_template,
             hoverlabel: { namelength: 0 },
@@ -193,6 +192,8 @@ Plotly.d3.json(url, function (figure) {
         font: {
             size: 24,
         },
+        paper_bgcolor:"#f4fbfe",
+        plot_bgcolor:"#f4fbfe",
         // autosize: true,
     };
 

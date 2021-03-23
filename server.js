@@ -11,8 +11,8 @@ path.join(__dirname, 'script.js');
 
 const PORT = 8080;
 const Dataset = JSON.parse(fs.readFileSync(path.join(__dirname, "data", "Dataset.json"), 'utf8'));
-const Publications = JSON.parse(fs.readFileSync(path.join(__dirname, "data", "Astrosat_Pubs.json"), 'utf8'));
-const Astrosat_Data = JSON.parse(fs.readFileSync(path.join(__dirname, "data", "Astrosat.json"), 'utf8'));
+// const Publications = JSON.parse(fs.readFileSync(path.join(__dirname, "data", "Astrosat_Pubs.json"), 'utf8'));
+// const Astrosat_Data = JSON.parse(fs.readFileSync(path.join(__dirname, "data", "Astrosat.json"), 'utf8'));
 
 let astro = [],
     not_astro = [];
@@ -43,7 +43,7 @@ app.get('/script.js', function(req, res) {
 // rendering /dataset api
 app.get('/dataset', function(req, res) {
     if (Object.keys(req.query).length !== 0) {
-        console.log('received trace and index');
+        // console.log('received trace and index');
         let { trace, point } = req.query;
         trace = parseInt(trace);
         point = parseInt(point);
@@ -55,17 +55,27 @@ app.get('/dataset', function(req, res) {
             throw "Invalid trace";
         }
     } else {
-        console.log(`sent all data`);
+        // console.log(`sent all data`);
         res.json({ "astro": astro, "not_astro": not_astro });
     }
 });
 
 app.get('/astrosat_publications', function(req, res) {
-
+    fs.readFile(path.join(__dirname, './data/Astrosat_Pubs.json'), 'utf8', function(err, data) {
+        res.end(data);
+    });
 });
 
 app.get('/astrosat', function(req, res) {
+    fs.readFile(path.join(__dirname, './data/Astrosat.json'), 'utf8', function(err, data) {
+        res.end(data);
+    });
+});
 
+app.get('/b2c', function(req, res) {
+    fs.readFile(path.join(__dirname, './data/BtoC.json'), 'utf8', function(err, data) {
+        res.end(data);
+    });
 });
 
 app.listen(PORT, () => console.log(`App is live at http://127.0.0.1:${PORT}`));
