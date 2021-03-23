@@ -207,7 +207,7 @@ Plotly.d3.json(url, function (figure) {
             y: 0.5,
         },
     });
-
+    var previous_state = "";
     graph.on("plotly_click", function (data) {
         const { curveNumber, pointNumber } = data.points[0];
         fetch(url + "?traceIndex=" + curveNumber + "&pointIndex=" + pointNumber)
@@ -296,17 +296,43 @@ Plotly.d3.json(url, function (figure) {
                         });
                         saveAs(csv_data, fileName);
                     });
-
+                    
                 // publications table
-                if (publications.length!==0 ){
-                    document.getElementById(`pub_source`).innerHTML=`${source_data["Source Name"]}`;
-                    for (let pub_index=0; pub_index<(publications.length); pub_index++){
-                        // console.log("URL",publications[pub_index].URL)
-                        // console.log("pubbb--", publications[pub_index].Authors);
-                        document.getElementById(`b2c_title`).innerHTML=publications[pub_index].Title;
-                        document.getElementById(`b2c_author`).innerHTML=publications[pub_index].Authors;
-                        document.getElementById(`b2c_url`).innerHTML=publications[pub_index].URL;
+                if (publications.length!==0 && previous_state!==source_data["Source Name"]){
+                    // console.log("pub called");
+                    const tbody = document.getElementById("tbody_");
+                    for (let pub_index=0; pub_index<(publications.length); pub_index++){   
+                        let trow= document.createElement("tr");
+                        const array_pub = ["Source Name","Title", "Authors", "URL"];
+                        previous_state = source_data["Source Name"];  
+                        for(let ii=0; ii<4; ii++){
+                            if (array_pub[ii]==="Source Name"){
+                                let td = document.createElement("td");
+                                td.innerHTML=`${source_data["Source Name"]}`;
+                                trow.appendChild(td);
+                            }
+                            if (array_pub[ii]==="URL"){
+                                let td = document.createElement("td");
+                                td.innerHTML=publications[pub_index]["URL"];
+                                trow.appendChild(td);
+                            }
+                            if (array_pub[ii]!=="URL" && array_pub[ii]!=="Source Name"){    
+                                // console.log("DATA",publications[pub_index][array_pub[ii]],[array_pub[ii]] );
+                                let td = document.createElement("td");
+                                td.innerHTML=publications[pub_index][array_pub[ii]];
+                                trow.appendChild(td);
+                            }
+                        }
+                        tbody.appendChild(trow);
                     }
+                    div1 = document.getElementById("publication_pdf");
+                    let button1 = document.createElement('button');
+                    button1.setAttribute("id",`download_pdf_publication`);
+                    button1.className+="btn btn-success me-2";
+                    button1.innerHTML = "Download Publications information PDF";
+                    div1.appendChild(button1);
+                    
+                
                     $("#download_pdf_publication")
                     .off()
                     .on("click", () => {
@@ -317,21 +343,28 @@ Plotly.d3.json(url, function (figure) {
                             row = [];
                         for (let key of lst) {
                             row.push([key, source_data[key]]);    
-                            
                         }
                         // if publication atleast 1
                         for (let index=0; index<(publications.length); index++){ 
                             row.push(["        ", "        "]);
                             row.push(["Publication", index+1]);
                             row.push(["Title", publications[index].Title]);
-                            row.push(["Title", publications[index].Authors]);
+                            row.push(["Authors", publications[index].Authors]);
+                            // console.log("link a", strTohtml(publications[0].URL));
+                            // console.log("ur", doc.textWithLink('Know More!', 25, 25, {url: strTohtml(publications[0].URL).toString()}));
+
+                            // row.push(["URL", doc.textWithLink('Know More!', 25, 25, {url: strTohtml(publications[0].URL).toString()})]);
                         }
                         doc.autoTable(col, row);
                         doc.save(`${source_data["Source Name"]}.pdf`);
                     });
                     document.getElementById("pub_table").hidden = false;
                 }else{
+                    if (previous_state===source_data["Source Name"]){
+                        document.getElementById("pub_table").hidden = false; 
+                    }else{
                     document.getElementById("pub_table").hidden = true;
+                    }
                 }
             });
     });
@@ -340,3 +373,9 @@ Plotly.d3.json(url, function (figure) {
 function table_info(value, response) {
     document.getElementById(`info_${value}`).innerHTML = response[value];
 }
+// converting string to html
+// function strTohtml(dat){
+//     let htmlObject = document.createElement('div');
+//     htmlObject.innerHTML = dat;
+//     return htmlObject.firstChild.href;
+// }
