@@ -231,10 +231,24 @@ Plotly.d3.json(url, function (figure) {
 
                 // information table
                 const data_keys = ["Name", "GLON", "GLAT", "Astrosat_obs"];
+                const data_keys_observed = ["Name", "Astrosat Instrument", "GLON", "GLAT", "Astrosat_obs"];
+                // console.log("as",source_data["Astrosat_obs"], "y",source_data["Astrosat_obs"]==="Yes" )
 
-                for (let key of data_keys) {
-                    table_info(key, source_data);
+                if (source_data["Astrosat_obs"]==="Yes"){ 
+                    for (let key of data_keys_observed) {
+                        table_info(key, source_data);
+                    }
+                    document.getElementById("instru").hidden = false;
+                    document.getElementById("info_Astrosat Instrument").hidden = false;
+
+                }else{  // Astrosat_obs==="No"
+                    for (let key of data_keys) {
+                        table_info(key, source_data);
+                    }
+                    document.getElementById("instru").hidden = true;
+                    document.getElementById("info_Astrosat Instrument").hidden = true;
                 }
+
                 document.getElementById("info_table").hidden = false;
 
                 $("#download_json")
@@ -282,6 +296,43 @@ Plotly.d3.json(url, function (figure) {
                         });
                         saveAs(csv_data, fileName);
                     });
+
+                // publications table
+                if (publications.length!==0 ){
+                    document.getElementById(`pub_source`).innerHTML=`${source_data["Source Name"]}`;
+                    for (let pub_index=0; pub_index<(publications.length); pub_index++){
+                        // console.log("URL",publications[pub_index].URL)
+                        // console.log("pubbb--", publications[pub_index].Authors);
+                        document.getElementById(`b2c_title`).innerHTML=publications[pub_index].Title;
+                        document.getElementById(`b2c_author`).innerHTML=publications[pub_index].Authors;
+                        document.getElementById(`b2c_url`).innerHTML=publications[pub_index].URL;
+                    }
+                    $("#download_pdf_publication")
+                    .off()
+                    .on("click", () => {
+                        // PDF mode
+                        const doc = new jsPDF();
+                        const lst = ["Source Name","Astrosat Instrument", "Date and Time","Observation_Id","ProposalId", "TargetId"];
+                        let col = ["Property", "Value"],
+                            row = [];
+                        for (let key of lst) {
+                            row.push([key, source_data[key]]);    
+                            
+                        }
+                        // if publication atleast 1
+                        for (let index=0; index<(publications.length); index++){ 
+                            row.push(["        ", "        "]);
+                            row.push(["Publication", index+1]);
+                            row.push(["Title", publications[index].Title]);
+                            row.push(["Title", publications[index].Authors]);
+                        }
+                        doc.autoTable(col, row);
+                        doc.save(`${source_data["Source Name"]}.pdf`);
+                    });
+                    document.getElementById("pub_table").hidden = false;
+                }else{
+                    document.getElementById("pub_table").hidden = true;
+                }
             });
     });
 });

@@ -63,6 +63,7 @@
             <thead class="thead-dark">
             <tr>
                 <th>Name</th>
+                <th id="instru" hidden>Astrosat Instrument</th>
                 <th>GLON</th>
                 <th>GLAT </th>
                 <th>Astrosat Observed</th>
@@ -72,6 +73,7 @@
             <tbody>
             <tr>
                 <td id="info_Name"></td>
+                <td id="info_Astrosat Instrument" hidden></td>
                 <td id="info_GLON"></td>
                 <td id="info_GLAT"></td>
                 <td id="info_Astrosat_obs"></td>
@@ -81,6 +83,30 @@
                     <button id="download_csv">CSV Format</button>
                 </td>
             </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="container" id="pub_table" hidden>
+    <div id="publications" class="text-left">
+        <h4 class="text-center">Publication</h4>
+        <table  class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Source Name</th>
+                    <th>Title</th>
+                    <th>Authors</th>
+                    <th>Know More</th>      
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="pub_source"></td>
+                    <td id="b2c_title"></td>
+                    <td id="b2c_author"></td>
+                    <td><button id="b2c_url">Know More!</button>
+                        <button id="download_pdf_publication">PDF Format</button>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>

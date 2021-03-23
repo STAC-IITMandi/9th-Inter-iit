@@ -10,7 +10,7 @@ path.join(__dirname, '/data/Astrosat.json');
 path.join(__dirname, 'index.html');
 path.join(__dirname, 'script.js');
 
-const PORT = 8080;
+const PORT = 8000;
 const URL = `http://127.0.0.1:${PORT}`;
 const Dataset = JSON.parse(fs.readFileSync(path.join(__dirname, "data", "Dataset.json"), 'utf8'));
 let Publications = (JSON.parse(fs.readFileSync(path.join(__dirname, "data", "Astrosat_Pubs.json"), 'utf8')));
@@ -46,11 +46,12 @@ app.get('/script.js', function(req, res) {
 // rendering /dataset api
 app.get('/dataset', function(req, res) {
     if (Object.keys(req.query).length !== 0) {
-        console.log('received trace and index');
+        // console.log('received trace and index');
         let { traceIndex, pointIndex } = req.query;
-        console.log(req.query);
+        // console.log(req.query);
         traceIndex = parseInt(traceIndex);
         pointIndex = parseInt(pointIndex);
+        // console.log("trace", traceIndex, "pointIndex", pointIndex);
         if (traceIndex === 0) {
             let to_send = { source_data: astro[pointIndex], publications : []};
             fetch(URL + '/b2c' + '?index=' + `${pointIndex}`)
@@ -58,12 +59,12 @@ app.get('/dataset', function(req, res) {
             .then((data) => {
                 if (data.flag === true) {
                     const indexes_ = data.indexes;
-                    console.log(`indexes ${indexes_}`);
+                    // console.log(`indexes ${indexes_}`);
                     for (let i in indexes_) {
                         to_send.publications.push(Publications[i]);
                     }
                 }
-            console.log(to_send);
+            // console.log(to_send);
             res.json(to_send);
             });
         } else if (traceIndex === 1) {
@@ -72,15 +73,15 @@ app.get('/dataset', function(req, res) {
             throw "Invalid trace";
         }
     } else {
-        console.log(`sent all data`);
+        // console.log(`sent all data`);
         res.json({ "astro": astro, "not_astro": not_astro });
     }
 });
 
 function search_in_C(index) {
-    console.log(index);
+    // console.log(index);
     const source_name = astro[index]["Source Name"];
-    console.log(source_name);
+    // console.log(source_name);
     if ( source_name in B2C ) {
         return B2C[source_name];
     }
@@ -90,11 +91,11 @@ function search_in_C(index) {
 }
 
 app.get('/b2c', function(req, res) {
-    console.log(req.query);
+    // console.log("b2c api",req.query);
     if (Object.keys(req.query).length !== 0) {
         if (req.query.index !== undefined) {
             const search = search_in_C(parseInt(req.query.index));
-            console.log(`search, ${search}`);
+            // console.log(`search, ${search}`);
             if (search !== false) {
                 console.log(`found`);
                 res.json({ flag : true, indexes : search });
