@@ -72,13 +72,13 @@ Plotly.d3.json(url, function (figure) {
             return row[key];
         });
     }
-
+    // unpack_glat to extract Galactic latitudes 
     function unpack_glat(rows, key) {
         return rows.map(function (row) {
             return parseFloat(row[key]);
         });
     }
-
+    // unpack_glon to extract Galactic longitudes
     function unpack_glon(rows, key) {
         return rows.map(function (row) {
             let current_lon = parseFloat(row[key]);
@@ -97,10 +97,10 @@ Plotly.d3.json(url, function (figure) {
     let trace = [
         {
             mode: "markers",
-            name: "Sources (Observed by AstroSat)",
+            name: "Sources (Observed by AstroSat)", 
             type: "scattergeo",
-            lon: unpack_glon(astro, "GLON"),
-            lat: unpack_glat(astro, "GLAT"),
+            lon: unpack_glon(astro, "GLON"), // calling unpack_glon function 
+            lat: unpack_glat(astro, "GLAT"), // calling unpack_glat function 
             customdata: unpack(astro, "Astrosat_obs"),
             typ: unpack(astro, "Type"),
             text: unpack(astro, "Name"),
@@ -115,8 +115,8 @@ Plotly.d3.json(url, function (figure) {
             mode: "markers",
             name: "Sources (Not observed by Astrosat)",
             type: "scattergeo",
-            lon: unpack_glon(not_astro, "GLON"),
-            lat: unpack_glat(not_astro, "GLAT"),
+            lon: unpack_glon(not_astro, "GLON"), // calling unpack_glon function
+            lat: unpack_glat(not_astro, "GLAT"), // calling unpack_glat function
             customdata: unpack(not_astro, "Astrosat_obs"),
             text: unpack(not_astro, "type"),
             text: unpack(not_astro, "Name"),

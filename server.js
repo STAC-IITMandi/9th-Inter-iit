@@ -17,7 +17,8 @@ const Astrosat_Data = JSON.parse(fs.readFileSync(path.join(__dirname, "data", "A
 let astro = [],
     not_astro = [];
 
-for (let obj of Dataset.objects) {
+// extracting Astrosat observed as "astro" and not observed as "not_astro" data separately.
+for (let obj of Dataset) {
     if (obj["Astrosat_obs"] == "Yes") {
         astro.push(obj);
     } else {
@@ -25,19 +26,21 @@ for (let obj of Dataset.objects) {
     }
 }
 
+// rendering index.html
 app.get("/", (req, res) => {
     fs.readFile(path.join(__dirname, 'index.html'), 'utf8', function(err, data) {
         res.end(data);
     });
 });
 
+// rendering script.js
 app.get('/script.js', function(req, res) {
     fs.readFile(path.join(__dirname, "script.js"), 'utf8', function(err, data) {
         res.end(data);
     });
 });
 
-//  apis
+// rendering /dataset api
 app.get('/dataset', function(req, res) {
     if (Object.keys(req.query).length !== 0) {
         console.log('received trace and index');
