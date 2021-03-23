@@ -21,6 +21,7 @@
     "homepage": "https://github.com/STAC-IITMandi/9th-Inter-iit#readme",
     "dependencies": {
         "express": "^4.17.1",
+        "node-fetch": "^2.6.1",
         "pkg": "^4.5.0"
     },
     "pkg": {
