@@ -73,7 +73,7 @@ Plotly.d3.json(url, function (figure) {
             return row[key];
         });
     }
-    // unpack_glat to extract Galactic latitudes 
+    // unpack_glat to extract Galactic latitudes
     function unpack_glat(rows, key) {
         return rows.map(function (row) {
             return parseFloat(row[key]);
@@ -97,10 +97,10 @@ Plotly.d3.json(url, function (figure) {
     let trace = [
         {
             mode: "markers",
-            name: "Sources (Observed by AstroSat)", 
+            name: "Sources (Observed by AstroSat)",
             type: "scattergeo",
-            lon: unpack_glon(astro, "GLON"), // calling unpack_glon function 
-            lat: unpack_glat(astro, "GLAT"), // calling unpack_glat function 
+            lon: unpack_glon(astro, "GLON"), // calling unpack_glon function
+            lat: unpack_glat(astro, "GLAT"), // calling unpack_glat function
             customdata: unpack(astro, "Astrosat_obs"),
             text: unpack(astro, "Name"),
             hovertemplate: hover_template,
@@ -108,7 +108,7 @@ Plotly.d3.json(url, function (figure) {
             marker: {
                 symbol: "star",
                 size: 8,
-                color:"black",
+                color: "black",
             },
         },
         {
@@ -192,8 +192,8 @@ Plotly.d3.json(url, function (figure) {
         font: {
             size: 24,
         },
-        paper_bgcolor:"#f4fbfe",
-        plot_bgcolor:"#f4fbfe",
+        paper_bgcolor: "#f4fbfe",
+        plot_bgcolor: "#f4fbfe",
         // autosize: true,
     };
 
@@ -210,11 +210,12 @@ Plotly.d3.json(url, function (figure) {
 
     graph.on("plotly_click", function (data) {
         const { curveNumber, pointNumber } = data.points[0];
-        fetch(url + "?trace=" + curveNumber + "&point=" + pointNumber)
+        fetch(url + "?traceIndex=" + curveNumber + "&pointIndex=" + pointNumber)
             .then((response) => {
                 return response.json();
             })
-            .then(function (data) {
+            .then(function (response) {
+                const { source_data } = response;
                 const data_div = document.getElementById("showdata");
                 while (data_div.firstChild) {
                     data_div.removeChild(data_div.lastChild);
@@ -222,7 +223,7 @@ Plotly.d3.json(url, function (figure) {
                 let ele1 = document.createElement("div");
                 ele1.className += "col-sm text-center";
                 let ele2 = document.createElement("h5");
-                ele2.innerHTML = "Data for " + data.Name;
+                ele2.innerHTML = "Data for " + source_data.Name;
                 let ele3 = document.createElement("div");
                 ele3.className += "col-sm text-center";
                 data_div.appendChild(ele1).appendChild(ele2);
@@ -231,19 +232,28 @@ Plotly.d3.json(url, function (figure) {
                 const data_keys = ["Name", "GLON", "GLAT", "Astrosat_obs"];
 
                 for (let key of data_keys) {
-                    table_info(key, data);
+                    table_info(key, source_data);
                 }
                 document.getElementById("info_table").hidden = false;
+
+                console.log(response);
+                if (source_data["Astrosat_obs"] === "yes") {
+                    const {indexes } = response;
+                    console.log(`publications : ${indexes}`);
+                }
 
                 $("#download_json")
                     .off()
                     .on("click", () => {
-                        const fileName = `${data["Name"]}.json`;
+                        const fileName = `${source_data["Name"]}.json`;
                         // Create a blob of the data
-                        let fileToSave = new Blob([JSON.stringify(data)], {
-                            type: "application/json",
-                            name: fileName,
-                        });
+                        let fileToSave = new Blob(
+                            [JSON.stringify(source_data)],
+                            {
+                                type: "application/json",
+                                name: fileName,
+                            }
+                        );
                         // Save the file
                         saveAs(fileToSave, fileName);
                     });
@@ -255,19 +265,22 @@ Plotly.d3.json(url, function (figure) {
                         const doc = new jsPDF();
                         let col = ["Property", "Value"],
                             row = [];
-                        for (let key in data) {
-                            row.push([key, data[key]]);
+                        for (let key in source_data) {
+                            row.push([key, source_data[key]]);
                         }
                         doc.autoTable(col, row);
-                        doc.save(`${data["Name"]}.pdf`);
+                        doc.save(`${source_data["Name"]}.pdf`);
                     });
 
                 $("#download_csv")
                     .off()
                     .on("click", () => {
                         // CSV
-                        const fileName = `${data["Name"]}.csv`;
-                        const csv = json2csv.parse([data], Object.keys(data));
+                        const fileName = `${source_data["Name"]}.csv`;
+                        const csv = json2csv.parse(
+                            [source_data],
+                            Object.keys(source_data)
+                        );
                         const csv_data = new Blob([csv], {
                             type: "text/plain;charset=utf-8",
                             name: fileName,
