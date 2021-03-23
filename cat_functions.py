@@ -1,10 +1,11 @@
 # Python
 
-import pandas as pd
-import numpy as np
+import os
 import re
 import json
-import os
+import numpy as np
+import pandas as pd
+from astropy.coordinates import SkyCoord, FK5
 os.chdir('data')
 
 
@@ -26,6 +27,7 @@ def catA(fname = ['hmxbcat.dat', 'lmxbcat.dat'], repDlm = [17, 24, 27, 30, 41, 4
         '''This inserts <char> next to the position <pos> in string <str>'''
         str = str[:pos + 1] + char + str[pos + 1:]
         return str
+    
     for i in range(len(data)):
         temp = data[i]
         for delimiter in repDlm:
@@ -40,11 +42,11 @@ def catA(fname = ['hmxbcat.dat', 'lmxbcat.dat'], repDlm = [17, 24, 27, 30, 41, 4
     return pd.DataFrame(data, columns = Fields).set_index(['Name'])
 
 
-def catB(fname="AS_observations_cat_Sept2018.txt",length=900,Fields=['Id','DnT','ObsId','Obs','Ra','Dec','ObsName','Name','Sat']):
+def catB(fname="AS_observations_cat_Sept2018.txt",length=900,Fields=['Id','DnT','ProposalId','TargetID','Ra','Dec','Observation_Id','Source_Name','Instrument']):
     data=[]
     with open(fname, "r") as f:
         for i in range(900):
-            data.append([i.strip() for i in re.split('\t|::|\n',f.readline())[:-1]])
+            data.append([i.strip() for i in re.split(r'\t|::|\n',f.readline())[:-1]])
     return pd.DataFrame(data,columns=Fields).set_index(['Id'])
 
 def catC(fname="AS_publications2019-21.txt"):
@@ -60,14 +62,14 @@ def catC(fname="AS_publications2019-21.txt"):
     final_data = {'publications':data_dict}
     return final_data
 
-def relateBtoC(B, C):
+def MatchingBtoC(B, C):
     """
         Searches observations in B, and returns a dict of which source is in which publication.
     """
     my_search = dict()
     for obj in B:
         if obj:
-            name = obj['Name']
+            name = obj['Source_Name']
             my_search[name] = []
             for index, pub in enumerate(C):
                 if pub:
@@ -84,4 +86,35 @@ def relateBtoC(B, C):
             final.append((key, val))
     final = dict(final)
     return final
+
+def MatchingBtoA(A, B):
+    
+    # Conversion of J2000 RA/DEC coordinates to Galactic Lat and Long
+    for dct in B:
+        cd = SkyCoord(ra=float(dct['Ra']), dec=float(dct['Dec']), unit='deg', frame=FK5, equinox='J2000')
+        gc = cd.transform_to('galactic')
+        dct['glon'] = str(round(gc.l.degree,1))
+        dct['glat'] = str(round(gc.b.degree,1))
+
+    """
+    Matching Catlog A and B for Astrosat Observations
+    and Transferring matched sources' data from B to A
+    """
+
+    for d1 in A:
+        flag = True
+        for d2 in B:            
+            if float(d1['GLON']) == float(d2['glon']) and float(d1['GLAT']) == float(d2['glat']):
+                d1['Astrosat_obs'] ='Yes'
+                d1['Name 2'] = d2['Source_Name']
+                d1['Astrosat Instrument'] = d2['Instrument']
+                d1['Date and Time'] = d2['DnT']
+                d1['Observation_Id'] = d2['Observation_Id']
+                d1['ProposalId'] = d2['ProposalId']
+                d1['TargetId'] = d2['TargetID']
+                flag = False
+        if flag: 
+            d1['Astrosat_obs']='No'
+
+    return A
 
