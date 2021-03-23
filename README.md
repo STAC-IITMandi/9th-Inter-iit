@@ -8,6 +8,9 @@
 4. Run `npm start`
 5. Application will be running at [http://127.0.0.1:8080](http://127.0.0.1:8080)
 
+## To use another dataset
+Run `npm start path/to/folder/with/[l,h]mxbcat.dat/files`
+
 ## To access api calls
 
 Eg. http://127.0.0.1:8080/dataset

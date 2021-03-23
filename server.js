@@ -1,15 +1,36 @@
 const fs = require('fs');
 const express = require('express')
 const path = require('path');
+const process = require('process');
 const app = express();
+const spawn = require('child_process');
+// const { spawnSync } = require('node:child_process');
 
-path.join(__dirname, '/data/Dataset.json');
-path.join(__dirname, '/data/Astrosat_Pubs.json');
-path.join(__dirname, '/data/Astrosat.json');
+path.join(__dirname, 'data/Dataset.json');
+path.join(__dirname, 'data/Astrosat_Pubs.json');
+path.join(__dirname, 'data/Astrosat.json');
 path.join(__dirname, 'index.html');
 path.join(__dirname, 'script.js');
+path.join(__dirname, 'cat_json.py');
+path.join(__dirname, 'cat_functions.py');
 
 const PORT = 8080;
+
+const arg = process.argv[2];
+if (arg) {
+    // python3
+    const python = spawn.spawnSync('python3', ['cat_json.py', arg])
+    var err = python.stderr.toString().trim();
+    if (err) {
+        console.log(err, "Trying again..");
+        // windows uses python instead of python3
+        const python2 = spawn.spawnSync('python', ['cat_json.py', arg])
+        var error_text = python2.stderr.toString().trim();
+        throw new Error(error_text);
+    }
+    console.log("Generating json files from ", arg, " directory");
+}
+
 const Dataset = JSON.parse(fs.readFileSync(path.join(__dirname, "data", "Dataset.json"), 'utf8'));
 const Publications = JSON.parse(fs.readFileSync(path.join(__dirname, "data", "Astrosat_Pubs.json"), 'utf8'));
 const Astrosat_Data = JSON.parse(fs.readFileSync(path.join(__dirname, "data", "Astrosat.json"), 'utf8'));
