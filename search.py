@@ -1,7 +1,6 @@
 import json
 
-def search(text, file="data/Astrosat_Pubs.json"):
-     f = json.load(open(file))
+def search(text, f):
      L=[]
      for i in range(len(f["publications"])):
          for j in f["publications"][i].keys():
@@ -9,5 +8,11 @@ def search(text, file="data/Astrosat_Pubs.json"):
                   L.append(i)
                   break
      return L
-         
-#print(search("NGC 2420"))
+
+def records(text,file="data/Astrosat_Pubs.json"):
+    f = json.load(open(file))
+    indices=search(text,f)
+    return json.dumps([f["publications"][i] for i in indices])
+    
+# print(search("NGC 2420",json.load(open("data/Astrosat_Pubs.json"))))
+# print(records("NGC 2420"))
