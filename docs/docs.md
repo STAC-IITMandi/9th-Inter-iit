@@ -39,17 +39,15 @@ You can see the legend at the right which tells you whether a cosmic source was 
 
 The web app allows you to click on any source and download the related data.
 
-ADD SS OF BUTTONS ETC
+![Screenshot from 2021-03-24 19-23-38](https://user-images.githubusercontent.com/54475046/112321942-7d6b3500-8cd6-11eb-9642-7072ee68b238.png)
 
 You can download the given data from catalog about a source in three different format.
 
-ADD SS ?
+![Screenshot from 2021-03-24 19-25-32](https://user-images.githubusercontent.com/54475046/112322265-c327fd80-8cd6-11eb-950a-75d535f7e64a.png)
 
 And you can see the proposal ID and the publications.
 
-#### Scalibility
-
-ADD
+The data used by the app in stored in the `data` folder.
 
 #### Used Technologies
 
@@ -71,7 +69,7 @@ Web Browser - Google Chrome 89
 
 Python - 3.6+
 
-OS - Ubuntu 20.04
+OS - Ubuntu 20.04, Windows 10
 
 npm - v6.14.11
 
