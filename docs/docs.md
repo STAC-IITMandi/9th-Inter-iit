@@ -58,10 +58,10 @@ We used Javascript and Python programming languages. We also used several framew
 1. jQuery 3.4.1 - for handling DOM Manipulation
 2. Bootstrap 4.4.1 - for styling the document.
 3. jsPDF, FileSave, json2csv - for converting JSON object to PDF, JSON, CSV formats.
-5. pkg - for packaging the app to executable.
-7. npm - for installing the frameworks.
-8. express - for handling the server.
-9. pandas, numpy - for data structures.
+4. pkg - for packaging the app to executable.
+5. npm - for installing the frameworks.
+6. express - for handling the server.
+7. pandas, numpy - for data structures.
 
 ### Minimum Requirements
 
