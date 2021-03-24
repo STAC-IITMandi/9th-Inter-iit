@@ -15,12 +15,18 @@ path.join(__dirname, '/data/BtoC.json');
 path.join(__dirname, 'index.html');
 path.join(__dirname, 'script.js');
 
-const arg = process.argv[2];
-if (arg) {
-    data_dir = arg;
-    console.log("Sourcing json files from ", arg, " directory");
-}
+var standard_input = process.stdin;
+standard_input.setEncoding('utf-8');
+console.log("Specify data folder for json files or press enter for default: ");
+standard_input.on('data', function(data) {
+    if (data != "\n") {
+        data_dir = data.replace(/\n*$/, "");
+        console.log("Sourcing json files from ", data_dir, " directory");
+    }
 
+    app.listen(PORT, () => console.log(`App is live at ${URL}`));
+
+});
 
 const Dataset = JSON.parse(fs.readFileSync(path.join(__dirname, data_dir, "Dataset.json"), 'utf8'));
 let Publications = (JSON.parse(fs.readFileSync(path.join(__dirname, data_dir, "Astrosat_Pubs.json"), 'utf8')));
@@ -119,5 +125,3 @@ app.get('/b2c', function(req, res) {
         console.log('b2c received empty req');
     }
 });
-
-app.listen(PORT, () => console.log(`App is live at ${URL}`));
