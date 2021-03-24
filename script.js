@@ -3,13 +3,7 @@ const { Parser } = window.json2csv;
 
 // Grid
 // right asc.
-const grid_ra_x = [
-    -180,
-    -150,
-    -120,
-    -90,
-    -60,
-    -30,
+const grid_ra_x = [-180, -150, -120, -90, -60, -30,
     0,
     30,
     60,
@@ -66,22 +60,22 @@ const grid_dec_textposition = [
 
 let graph = document.getElementById("graph");
 
-Plotly.d3.json(url, function (figure) {
+Plotly.d3.json(url, function(figure) {
     function unpack(rows, key) {
-        return rows.map(function (row) {
+        return rows.map(function(row) {
             // console.log("in unpack",row);
             return row[key];
         });
     }
     // unpack_glat to extract Galactic latitudes
     function unpack_glat(rows, key) {
-        return rows.map(function (row) {
+        return rows.map(function(row) {
             return parseFloat(row[key]);
         });
     }
     // unpack_glon to extract Galactic longitudes
     function unpack_glon(rows, key) {
-        return rows.map(function (row) {
+        return rows.map(function(row) {
             let current_lon = parseFloat(row[key]);
             if (current_lon > 180.0) {
                 current_lon -= 360.0;
@@ -94,8 +88,7 @@ Plotly.d3.json(url, function (figure) {
 
     let hover_template =
         "Lon: %{lon}<br>Lat: %{lat}<br>Name: %{text}<br>Astrosat Observed: %{customdata}";
-    let trace = [
-        {
+    let trace = [{
             mode: "markers",
             name: "Sources (Observed by AstroSat)",
             type: "scattergeo",
@@ -226,13 +219,13 @@ Plotly.d3.json(url, function (figure) {
             overflowColumns: "linebreak",
         },
     };
-    graph.on("plotly_click", function (data) {
+    graph.on("plotly_click", function(data) {
         const { curveNumber, pointNumber } = data.points[0];
         fetch(url + "?traceIndex=" + curveNumber + "&pointIndex=" + pointNumber)
             .then((response) => {
                 return response.json();
             })
-            .then(function (response) {
+            .then(function(response) {
                 const { source_data, publications } = response;
                 const data_div = document.getElementById("showdata");
                 while (data_div.firstChild) {
@@ -252,7 +245,7 @@ Plotly.d3.json(url, function (figure) {
                 // information table
                 const data_keys = ["Name", "GLON", "GLAT", "Astrosat_obs"];
                 const data_keys_observed = ["Astrosat_Instrument", "Observation_Id", "ProposalId"];
-                
+
                 for (let key of data_keys) {
                     table_info(key, info(key), source_data);
                 }
@@ -262,8 +255,7 @@ Plotly.d3.json(url, function (figure) {
                         document.getElementById(key).hidden = false;
                         document.getElementById(info(key)).hidden = false;
                     }
-                }
-                else {
+                } else {
                     for (let key of data_keys_observed) {
                         document.getElementById(info(key)).hidden = true;
                         document.getElementById(key).hidden = true;
@@ -277,8 +269,7 @@ Plotly.d3.json(url, function (figure) {
                         const fileName = `${source_data["Name"]}.json`;
                         // Create a blob of the data
                         let fileToSave = new Blob(
-                            [JSON.stringify(source_data)],
-                            {
+                            [JSON.stringify(source_data, null, 3)], {
                                 type: "application/json",
                                 name: fileName,
                             }
@@ -387,9 +378,7 @@ Plotly.d3.json(url, function (figure) {
                             console.log(publications);
                             // if publication atleast 1
                             for (
-                                let index = 0;
-                                index < publications.length;
-                                index++
+                                let index = 0; index < publications.length; index++
                             ) {
                                 row.push(["        ", "        "]);
                                 row.push(["Publication", index + 1]);
@@ -418,9 +407,9 @@ Plotly.d3.json(url, function (figure) {
 });
 
 const info = a => `info_${a}`;
+
 function table_info(key, value, response) {
     document
-    .getElementById(value)
-    .innerHTML = response[key];
+        .getElementById(value)
+        .innerHTML = response[key];
 }
-
