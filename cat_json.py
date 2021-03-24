@@ -19,7 +19,7 @@ def catA_json(data_dir="data", Fields=['Type', 'RAh', 'RAm', 'RAs', 'u_RAs', 'DE
             data[-1].update({field: A[field][i]})
             
     objects={"objects":data}
-    with open(os.path.join("data", "Dataset.json"), 'w') as f:
+    with open(os.path.join(data_dir, "Dataset.json"), 'w') as f:
         json.dump(objects, f, indent=3)
     
 
@@ -32,31 +32,31 @@ def catB_json(data_dir="data", Fields=['DnT','ProposalId','TargetID','Ra','Dec',
             data[-1].update({field: B[field][i]})
             
     objects={"objects":data}
-    with open(os.path.join("data", "Astrosat.json"), 'w') as f:
+    with open(os.path.join(data_dir, "Astrosat.json"), 'w') as f:
         json.dump(objects, f, indent=3)
     
     
 def catC_json(data_dir="data"):
     publications=cat_functions.catC(dir_name=data_dir)
-    with open(os.path.join("data", "Astrosat_Pubs.json"), 'w') as f:
+    with open(os.path.join(data_dir, "Astrosat_Pubs.json"), 'w') as f:
         json.dump(publications, f, indent=3)
    
-def BtoC_json():
-    B=json.load(open(os.path.join("data", "Astrosat.json")))
-    C=json.load(open(os.path.join("data", "Astrosat_Pubs.json")))
+def BtoC_json(data_dir="data"):
+    B=json.load(open(os.path.join(data_dir, "Astrosat.json")))
+    C=json.load(open(os.path.join(data_dir, "Astrosat_Pubs.json")))
     B = B['objects']
     C = C['publications']
     search=cat_functions.MatchingBtoC(B,C)
-    with open(os.path.join("data", "BtoC.json"), 'w') as f:
+    with open(os.path.join(data_dir, "BtoC.json"), 'w') as f:
         json.dump(search, f, indent=3)
 
-def AtoB_json():
-    A=json.load(open("./data/Dataset.json"))
-    B=json.load(open("./data/Astrosat.json"))
+def AtoB_json(data_dir="data"):
+    A=json.load(open(os.path.join(data_dir, "Dataset.json")))
+    B=json.load(open(os.path.join(data_dir, "Astrosat.json")))
     A = A['objects']
     B = B['objects']
     search = cat_functions.MatchingBtoA(A, B)
-    with open('Dataset.json','w') as outfile:
+    with open(os.path.join(data_dir, 'Dataset.json'), 'w') as outfile:
         json.dump(search, outfile, indent=3)
   
 if __name__ == "__main__" :
