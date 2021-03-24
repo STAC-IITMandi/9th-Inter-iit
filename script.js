@@ -240,14 +240,11 @@ Plotly.d3.json(url, function (figure) {
                 }
                 let ele1 = document.createElement("div");
                 ele1.className += "col-sm text-center";
-                let ele2 = document.createElement("h5");
+                let ele2 = document.createElement("h3");
                 ele2.innerHTML =
                     "Data for " +
                     source_data.Name +
                     "<small> (Download data to get full list of products)";
-                let ele3 = document.createElement("div");
-                ele3.className += "col-sm text-center";
-                data_div.appendChild(ele1).appendChild(ele2);
 
                 // information table
                 const data_keys = ["Name", "GLON", "GLAT", "Astrosat_obs"];
@@ -262,6 +259,9 @@ Plotly.d3.json(url, function (figure) {
                         document.getElementById(key).hidden = false;
                         document.getElementById(info(key)).hidden = false;
                     }
+                    const curr_title = ele2.innerHTML;
+                    const i = curr_title.search("<small>");
+                    ele2.innerHTML = curr_title.substr(0, i) + ` (${source_data["Source Name"]})` + curr_title.substr(i, curr_title.length - i);
                 }
                 else {
                     for (let key of data_keys_observed) {
@@ -269,6 +269,7 @@ Plotly.d3.json(url, function (figure) {
                         document.getElementById(key).hidden = true;
                     }
                 }
+                data_div.appendChild(ele1).appendChild(ele2);
                 document.getElementById("info_table").hidden = false;
 
                 $("#download_json")
