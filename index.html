@@ -10,29 +10,30 @@
         body {
             background-color: #ebf5fb;
         }
-
+        
         h1 {
             color: #34568B;
             font-family: 'Chango', cursive;
         }
-
-        .js-plotly-plot .plotly .modebar{
+        
+        .js-plotly-plot .plotly .modebar {
             left: 50%;
         }
         
         a.modebar-btn {
-           font-size: 30px !important;
+            font-size: 30px !important;
         }
-
+        
         #graph {
             height: 70vh;
         }
+        
         .center {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 200px;
-            border: 3px solid green; 
+            border: 3px solid green;
         }
     </style>
     <!-- Bootstrap -->
@@ -66,50 +67,53 @@
     <div id="showdata"></div>
 
     <div class="container" id="info_table" hidden>
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped w-auto">
             <thead class="thead-dark">
-            <tr>
-                <th>Name</th>
-                <th id="instru" hidden>Astrosat Instrument</th>
-                <th>GLON</th>
-                <th>GLAT </th>
-                <th>Astrosat Observed</th>
-                <th>Download Data</th>
-            </tr>
+                <tr>
+                    <th>Name</th>
+                    <th id="Astrosat_Instrument" hidden>Astrosat Instrument</th>
+                    <th id="ProposalId" hidden>Proposal ID</th>
+                    <th id="Observation_Id" hidden>Observation ID</th>
+                    <th>GLON</th>
+                    <th>GLAT </th>
+                    <th>Astrosat Observed</th>
+                    <th>Download Data</th>
+                </tr>
             </thead>
             <tbody>
-            <tr>
-                <td id="info_Name"></td>
-                <td id="info_Astrosat Instrument" hidden></td>
-                <td id="info_GLON"></td>
-                <td id="info_GLAT"></td>
-                <td id="info_Astrosat_obs"></td>
-                <td>
-                    <button class="btn btn-success me-2" id="download_json">JSON Format</button>
-                    <button class="btn btn-success me-2" id="download_pdf">PDF Format</button>
-                    <button class="btn btn-success me-2" id="download_csv">CSV Format</button>
-                </td>
-            </tr>
+                <tr>
+                    <td id="info_Name"></td>
+                    <td id="info_Astrosat_Instrument" hidden></td>
+                    <td id="info_ProposalId" hidden></td>
+                    <td id="info_Observation_Id" hidden></td>
+                    <td id="info_GLON"></td>
+                    <td id="info_GLAT"></td>
+                    <td id="info_Astrosat_obs"></td>
+                    <td>
+                        <button class="btn btn-success me-2 p-1" id="download_json">JSON Format</button>
+                        <button class="btn btn-success me-2 p-1" id="download_pdf">PDF Format</button>
+                        <button class="btn btn-success me-2 p-1 mt-1" id="download_csv">CSV Format</button>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
     <div class="container" id="pub_table" hidden>
-    <div id="publications" class="text-left">
-        <h3 class="text-center">Publications of Observed Astrosat Data</h3>
-        <table  class="table table-bordered table-striped">
-            <thead class="thead-dark">
-                <tr>
-                    <th>Source Name</th>
-                    <th>Title</th>
-                    <th>Authors</th>
-                    <th>Url</th>      
-                </tr>
-            </thead>
-            <tbody id="tbody_">
-            </tbody>
-        </table>
-        <div class="justify-content-center text-center" id="publication_pdf"></div>
-    </div>
+        <div id="publications" class="text-left">
+            <h3 class="text-center">Publications of Observed Astrosat Data</h3>
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Source Name</th>
+                        <th>Title</th>
+                        <th>Authors</th>
+                        <th>Url</th>
+                    </tr>
+                </thead>
+                <tbody id="pub_body"></tbody>
+            </table>
+            <div class="justify-content-center text-center" id="publication_pdf"></div>
+        </div>
     </div>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="script.js"></script>

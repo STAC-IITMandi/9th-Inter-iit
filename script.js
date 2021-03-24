@@ -3,13 +3,7 @@ const { Parser } = window.json2csv;
 
 // Grid
 // right asc.
-const grid_ra_x = [
-    -180,
-    -150,
-    -120,
-    -90,
-    -60,
-    -30,
+const grid_ra_x = [-180, -150, -120, -90, -60, -30,
     0,
     30,
     60,
@@ -66,22 +60,22 @@ const grid_dec_textposition = [
 
 let graph = document.getElementById("graph");
 
-Plotly.d3.json(url, function (figure) {
+Plotly.d3.json(url, function(figure) {
     function unpack(rows, key) {
-        return rows.map(function (row) {
+        return rows.map(function(row) {
             // console.log("in unpack",row);
             return row[key];
         });
     }
     // unpack_glat to extract Galactic latitudes
     function unpack_glat(rows, key) {
-        return rows.map(function (row) {
+        return rows.map(function(row) {
             return parseFloat(row[key]);
         });
     }
     // unpack_glon to extract Galactic longitudes
     function unpack_glon(rows, key) {
-        return rows.map(function (row) {
+        return rows.map(function(row) {
             let current_lon = parseFloat(row[key]);
             if (current_lon > 180.0) {
                 current_lon -= 360.0;
@@ -93,9 +87,8 @@ Plotly.d3.json(url, function (figure) {
     let { astro, not_astro } = figure;
 
     let hover_template =
-        "Lon: %{lon}<br>Lat: %{lat}<br>Name: %{text}<br>Astro: %{customdata}";
-    let trace = [
-        {
+        "Lon: %{lon}<br>Lat: %{lat}<br>Name: %{text}<br>Astrosat Observed: %{customdata}";
+    let trace = [{
             mode: "markers",
             name: "Sources (Observed by AstroSat)",
             type: "scattergeo",
@@ -207,16 +200,33 @@ Plotly.d3.json(url, function (figure) {
             y: 0.5,
         },
     });
-    var previous_state = "";
-    graph.on("plotly_click", function (data) {
+    let previous_state = "";
+    const pdf_config = {
+        startY: false,
+        theme: "grid",
+        columnWidth: "wrap",
+        showHeader: "everyPage",
+        columnStyles: {
+            0: { columnWidth: "100" },
+        },
+        headerStyles: { theme: "grid" },
+        styles: {
+            overflow: "linebreak",
+            columnWidth: "100",
+            font: "arial",
+            fontSize: 10,
+            cellPadding: 4,
+            overflowColumns: "linebreak",
+        },
+    };
+    graph.on("plotly_click", function(data) {
         const { curveNumber, pointNumber } = data.points[0];
         fetch(url + "?traceIndex=" + curveNumber + "&pointIndex=" + pointNumber)
             .then((response) => {
                 return response.json();
             })
-            .then(function (response) {
-                const {source_data, publications} = response;
-                console.log(publications);
+            .then(function(response) {
+                const { source_data, publications } = response;
                 const data_div = document.getElementById("showdata");
                 while (data_div.firstChild) {
                     data_div.removeChild(data_div.lastChild);
@@ -224,31 +234,33 @@ Plotly.d3.json(url, function (figure) {
                 let ele1 = document.createElement("div");
                 ele1.className += "col-sm text-center";
                 let ele2 = document.createElement("h5");
-                ele2.innerHTML = "Data for " + source_data.Name + "<small> (Download data to get full list of products)";
+                ele2.innerHTML =
+                    "Data for " +
+                    source_data.Name +
+                    "<small> (Download data to get full list of products)";
                 let ele3 = document.createElement("div");
                 ele3.className += "col-sm text-center";
                 data_div.appendChild(ele1).appendChild(ele2);
 
                 // information table
                 const data_keys = ["Name", "GLON", "GLAT", "Astrosat_obs"];
-                const data_keys_observed = ["Name", "Astrosat Instrument", "GLON", "GLAT", "Astrosat_obs"];
-                // console.log("as",source_data["Astrosat_obs"], "y",source_data["Astrosat_obs"]==="Yes" )
+                const data_keys_observed = ["Astrosat_Instrument", "Observation_Id", "ProposalId"];
 
-                if (source_data["Astrosat_obs"]==="Yes"){
-                    for (let key of data_keys_observed) {
-                        table_info(key, source_data);
-                    }
-                    document.getElementById("instru").hidden = false;
-                    document.getElementById("info_Astrosat Instrument").hidden = false;
-
-                }else{  // Astrosat_obs==="No"
-                    for (let key of data_keys) {
-                        table_info(key, source_data);
-                    }
-                    document.getElementById("instru").hidden = true;
-                    document.getElementById("info_Astrosat Instrument").hidden = true;
+                for (let key of data_keys) {
+                    table_info(key, info(key), source_data);
                 }
-
+                if (source_data["Astrosat_obs"] === "Yes") {
+                    for (let key of data_keys_observed) {
+                        table_info(key, info(key), source_data);
+                        document.getElementById(key).hidden = false;
+                        document.getElementById(info(key)).hidden = false;
+                    }
+                } else {
+                    for (let key of data_keys_observed) {
+                        document.getElementById(info(key)).hidden = true;
+                        document.getElementById(key).hidden = true;
+                    }
+                }
                 document.getElementById("info_table").hidden = false;
 
                 $("#download_json")
@@ -257,8 +269,7 @@ Plotly.d3.json(url, function (figure) {
                         const fileName = `${source_data["Name"]}.json`;
                         // Create a blob of the data
                         let fileToSave = new Blob(
-                            [JSON.stringify(source_data)],
-                            {
+                            [JSON.stringify(source_data, null, 3)], {
                                 type: "application/json",
                                 name: fileName,
                             }
@@ -278,7 +289,7 @@ Plotly.d3.json(url, function (figure) {
                             row.push([key, source_data[key]]);
                         }
                         doc.autoTable(col, row);
-                        doc.save(`${source_data["Name"]}.pdf`);
+                        doc.save(`${source_data["Name"]}.pdf`, pdf_config);
                     });
 
                 $("#download_csv")
@@ -297,85 +308,108 @@ Plotly.d3.json(url, function (figure) {
                         saveAs(csv_data, fileName);
                     });
 
+                console.log(publications);
                 // publications table
-                if (publications.length!==0 && previous_state!==source_data["Source Name"]){
-                    // console.log("pub called");
-                    const tbody = document.getElementById("tbody_");
-                    for (let pub_index=0; pub_index<(publications.length); pub_index++){
-                        let trow= document.createElement("tr");
-                        const array_pub = ["Source Name","Title", "Authors", "URL"];
-                        previous_state = source_data["Source Name"];
-                        for(let ii=0; ii<4; ii++){
-                            if (array_pub[ii]==="Source Name"){
-                                let td = document.createElement("td");
-                                td.innerHTML=`${source_data["Source Name"]}`;
+                if (
+                    publications !== undefined &&
+                    publications.length !== 0 &&
+                    previous_state !== source_data["Name"]
+                ) {
+                    previous_state = source_data["Name"];
+                    const tbody = document.getElementById("pub_body");
+                    while (tbody.firstChild) {
+                        tbody.removeChild(tbody.firstChild);
+                    }
+                    for (let publication of publications) {
+                        let trow = document.createElement("tr");
+                        const array_pub = [
+                            "Source Name",
+                            "Title",
+                            "Authors",
+                            "URL",
+                        ];
+                        console.log(source_data["Name"]);
+                        console.log(source_data);
+                        for (let key of array_pub) {
+                            if (key === "Source Name") {
+                                const td = document.createElement("td");
+                                td.innerHTML = source_data["Source Name"];
                                 trow.appendChild(td);
-                            }
-                            if (array_pub[ii]==="URL"){
-                                let td = document.createElement("td");
-                                td.innerHTML=publications[pub_index]["URL"];
+                            } else if (key === "URL") {
+                                const td = document.createElement("td");
+                                td.innerHTML = publication["URL"];
                                 trow.appendChild(td);
-                            }
-                            if (array_pub[ii]!=="URL" && array_pub[ii]!=="Source Name"){
-                                // console.log("DATA",publications[pub_index][array_pub[ii]],[array_pub[ii]] );
-                                let td = document.createElement("td");
-                                td.innerHTML=publications[pub_index][array_pub[ii]];
+                            } else {
+                                const td = document.createElement("td");
+                                td.innerHTML = publication[key];
                                 trow.appendChild(td);
                             }
                         }
                         tbody.appendChild(trow);
                     }
+
                     div1 = document.getElementById("publication_pdf");
-                    let button1 = document.createElement('button');
-                    button1.setAttribute("id",`download_pdf_publication`);
-                    button1.className+="btn btn-success me-2";
-                    button1.innerHTML = "Download Publications information PDF";
-                    div1.appendChild(button1);
 
-
+                    if (document.getElementById("download_pdf_publication") === null) {
+                        let button1 = document.createElement("button");
+                        button1.setAttribute("id", `download_pdf_publication`);
+                        button1.className += "btn btn-success me-2";
+                        button1.innerHTML = "Download Publications information PDF";
+                        div1.appendChild(button1);
+                    }
                     $("#download_pdf_publication")
-                    .off()
-                    .on("click", () => {
-                        // PDF mode
-                        const doc = new jsPDF();
-                        const lst = ["Source Name","Astrosat Instrument", "Date and Time","Observation_Id","ProposalId", "TargetId"];
-                        let col = ["Property", "Value"],
-                            row = [];
-                        for (let key of lst) {
-                            row.push([key, source_data[key]]);
-                        }
-                        // if publication atleast 1
-                        for (let index=0; index<(publications.length); index++){
-                            row.push(["        ", "        "]);
-                            row.push(["Publication", index+1]);
-                            row.push(["Title", publications[index].Title]);
-                            row.push(["Authors", publications[index].Authors]);
-                            // console.log("link a", strTohtml(publications[0].URL));
-                            // console.log("ur", doc.textWithLink('Know More!', 25, 25, {url: strTohtml(publications[0].URL).toString()}));
-
-                            // row.push(["URL", doc.textWithLink('Know More!', 25, 25, {url: strTohtml(publications[0].URL).toString()})]);
-                        }
-                        doc.autoTable(col, row);
-                        doc.save(`${source_data["Source Name"]}.pdf`);
-                    });
+                        .off()
+                        .on("click", () => {
+                            // PDF mode
+                            const doc = new jsPDF();
+                            const lst = [
+                                "Source Name",
+                                "Astrosat Instrument",
+                                "Date and Time",
+                                "Observation_Id",
+                                "ProposalId",
+                                "TargetId",
+                            ];
+                            let col = ["Property", "Value"],
+                                row = [];
+                            for (let key of lst) {
+                                row.push([key, source_data[key]]);
+                            }
+                            console.log(publications);
+                            // if publication atleast 1
+                            for (
+                                let index = 0; index < publications.length; index++
+                            ) {
+                                row.push(["        ", "        "]);
+                                row.push(["Publication", index + 1]);
+                                row.push(["Title", publications[index].Title]);
+                                row.push([
+                                    "Authors",
+                                    publications[index].Authors,
+                                ]);
+                            }
+                            doc.autoTable(col, row);
+                            doc.save(
+                                `${source_data["Name"]}.pdf`,
+                                pdf_config
+                            );
+                        });
                     document.getElementById("pub_table").hidden = false;
-                }else{
-                    if (previous_state===source_data["Source Name"]){
+                } else {
+                    if (previous_state === source_data["Name"]) {
                         document.getElementById("pub_table").hidden = false;
-                    }else{
-                    document.getElementById("pub_table").hidden = true;
+                    } else {
+                        document.getElementById("pub_table").hidden = true;
                     }
                 }
             });
     });
 });
 
-function table_info(value, response) {
-    document.getElementById(`info_${value}`).innerHTML = response[value];
+const info = a => `info_${a}`;
+
+function table_info(key, value, response) {
+    document
+        .getElementById(value)
+        .innerHTML = response[key];
 }
-// converting string to html
-// function strTohtml(dat){
-//     let htmlObject = document.createElement('div');
-//     htmlObject.innerHTML = dat;
-//     return htmlObject.firstChild.href;
-// }

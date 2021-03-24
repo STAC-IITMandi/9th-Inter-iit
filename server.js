@@ -7,13 +7,12 @@ const app = express();
 const spawn = require('child_process');
 // const { spawnSync } = require('node:child_process');
 
-path.join(__dirname, 'data/Dataset.json');
-path.join(__dirname, 'data/Astrosat_Pubs.json');
-path.join(__dirname, 'data/Astrosat.json');
+path.join(__dirname, '/data/Dataset.json');
+path.join(__dirname, '/data/Astrosat_Pubs.json');
+path.join(__dirname, '/data/Astrosat.json');
+path.join(__dirname, '/data/BtoC.json');
 path.join(__dirname, 'index.html');
 path.join(__dirname, 'script.js');
-path.join(__dirname, 'cat_json.py');
-path.join(__dirname, 'cat_functions.py');
 
 const PORT = 8000;
 
@@ -75,24 +74,24 @@ app.get('/dataset', function(req, res) {
         pointIndex = parseInt(pointIndex);
         // console.log("trace", traceIndex, "pointIndex", pointIndex);
         if (traceIndex === 0) {
-            let to_send = { source_data: astro[pointIndex], publications : []};
+            let to_send = { source_data: astro[pointIndex], publications: [] };
             fetch(URL + '/b2c' + '?index=' + `${pointIndex}`)
-            .then(response => response.json())
-            .then((data) => {
-                if (data.flag === true) {
-                    const indexes_ = data.indexes;
-                    // console.log(`indexes ${indexes_}`);
-                    for (let i in indexes_) {
-                        to_send.publications.push(Publications[i]);
+                .then(response => response.json())
+                .then((data) => {
+                    if (data.flag === true) {
+                        const indexes_ = data.indexes;
+                        // console.log(`indexes ${indexes_}`);
+                        for (let i in indexes_) {
+                            to_send.publications.push(Publications[i]);
+                        }
                     }
-                }
-            // console.log(to_send);
-            res.json(to_send);
-            });
+                    // console.log(to_send);
+                    res.json(to_send);
+                });
         } else if (traceIndex === 1) {
-            res.json({ source_data: not_astro[pointIndex]});
+            res.json({ source_data: not_astro[pointIndex] });
         } else {
-            throw "Invalid trace";
+            console.log("Invalid trace");
         }
     } else {
         // console.log(`sent all data`);
@@ -104,10 +103,9 @@ function search_in_C(index) {
     // console.log(index);
     const source_name = astro[index]["Source Name"];
     // console.log(source_name);
-    if ( source_name in B2C ) {
+    if (source_name in B2C) {
         return B2C[source_name];
-    }
-    else {
+    } else {
         return false;
     }
 }
@@ -119,19 +117,16 @@ app.get('/b2c', function(req, res) {
             const search = search_in_C(parseInt(req.query.index));
             // console.log(`search, ${search}`);
             if (search !== false) {
-                console.log(`found`);
-                res.json({ flag : true, indexes : search });
-            }
-            else {
-                console.log(`not found`);
+                // console.log(`found`);
+                res.json({ flag: true, indexes: search });
+            } else {
+                // console.log(`not found`);
                 res.json({ flag: false });
             }
+        } else {
+            console.log('b2c received invalid req');
         }
-        else {
-            console.log('b2c received invalid req'); 
-        }
-    }
-    else {
+    } else {
         console.log('b2c received empty req');
     }
 });
