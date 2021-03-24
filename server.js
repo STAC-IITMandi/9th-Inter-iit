@@ -4,8 +4,9 @@ const fetch = require('node-fetch');
 const path = require('path');
 const process = require('process');
 const app = express();
-const spawn = require('child_process');
-// const { spawnSync } = require('node:child_process');
+const PORT = 8000;
+const URL = `http://127.0.0.1:${PORT}`;
+var data_dir = "data";
 
 path.join(__dirname, '/data/Dataset.json');
 path.join(__dirname, '/data/Astrosat_Pubs.json');
@@ -14,29 +15,17 @@ path.join(__dirname, '/data/BtoC.json');
 path.join(__dirname, 'index.html');
 path.join(__dirname, 'script.js');
 
-const PORT = 8000;
-
 const arg = process.argv[2];
 if (arg) {
-    // python3
-    const python = spawn.spawnSync('python3', ['cat_json.py', arg])
-    var err = python.stderr.toString().trim();
-    if (err) {
-        console.log(err, "Trying again..");
-        // windows uses python instead of python3
-        const python2 = spawn.spawnSync('python', ['cat_json.py', arg])
-        var error_text = python2.stderr.toString().trim();
-        throw new Error(error_text);
-    }
-    console.log("Generating json files from ", arg, " directory");
+    data_dir = arg;
+    console.log("Sourcing json files from ", arg, " directory");
 }
 
-const URL = `http://127.0.0.1:${PORT}`;
 
-const Dataset = JSON.parse(fs.readFileSync(path.join(__dirname, "data", "Dataset.json"), 'utf8'));
-let Publications = (JSON.parse(fs.readFileSync(path.join(__dirname, "data", "Astrosat_Pubs.json"), 'utf8')));
+const Dataset = JSON.parse(fs.readFileSync(path.join(__dirname, data_dir, "Dataset.json"), 'utf8'));
+let Publications = (JSON.parse(fs.readFileSync(path.join(__dirname, data_dir, "Astrosat_Pubs.json"), 'utf8')));
 Publications = Publications.publications;
-const B2C = JSON.parse(fs.readFileSync(path.join(__dirname, "data", "BtoC.json"), 'utf8'));
+const B2C = JSON.parse(fs.readFileSync(path.join(__dirname, data_dir, "BtoC.json"), 'utf8'));
 
 let astro = [],
     not_astro = [];
