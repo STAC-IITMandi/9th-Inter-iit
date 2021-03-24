@@ -8,6 +8,6 @@
 4. Run `npm start`
 5. Application will be running at [http://127.0.0.1:8080](http://127.0.0.1:8080)
 
-## To access api calls
+## Documentation
 
-Eg. http://127.0.0.1:8080/dataset
+Please checkout the documentation in `docs` folder.
