@@ -224,7 +224,7 @@ Plotly.d3.json(url, function (figure) {
                 let ele1 = document.createElement("div");
                 ele1.className += "col-sm text-center";
                 let ele2 = document.createElement("h5");
-                ele2.innerHTML = "Data for " + source_data.Name;
+                ele2.innerHTML = "Data for " + source_data.Name + "<small> (Download data to get full list of products)";
                 let ele3 = document.createElement("div");
                 ele3.className += "col-sm text-center";
                 data_div.appendChild(ele1).appendChild(ele2);
@@ -234,7 +234,7 @@ Plotly.d3.json(url, function (figure) {
                 const data_keys_observed = ["Name", "Astrosat Instrument", "GLON", "GLAT", "Astrosat_obs"];
                 // console.log("as",source_data["Astrosat_obs"], "y",source_data["Astrosat_obs"]==="Yes" )
 
-                if (source_data["Astrosat_obs"]==="Yes"){ 
+                if (source_data["Astrosat_obs"]==="Yes"){
                     for (let key of data_keys_observed) {
                         table_info(key, source_data);
                     }
@@ -296,15 +296,15 @@ Plotly.d3.json(url, function (figure) {
                         });
                         saveAs(csv_data, fileName);
                     });
-                    
+
                 // publications table
                 if (publications.length!==0 && previous_state!==source_data["Source Name"]){
                     // console.log("pub called");
                     const tbody = document.getElementById("tbody_");
-                    for (let pub_index=0; pub_index<(publications.length); pub_index++){   
+                    for (let pub_index=0; pub_index<(publications.length); pub_index++){
                         let trow= document.createElement("tr");
                         const array_pub = ["Source Name","Title", "Authors", "URL"];
-                        previous_state = source_data["Source Name"];  
+                        previous_state = source_data["Source Name"];
                         for(let ii=0; ii<4; ii++){
                             if (array_pub[ii]==="Source Name"){
                                 let td = document.createElement("td");
@@ -316,7 +316,7 @@ Plotly.d3.json(url, function (figure) {
                                 td.innerHTML=publications[pub_index]["URL"];
                                 trow.appendChild(td);
                             }
-                            if (array_pub[ii]!=="URL" && array_pub[ii]!=="Source Name"){    
+                            if (array_pub[ii]!=="URL" && array_pub[ii]!=="Source Name"){
                                 // console.log("DATA",publications[pub_index][array_pub[ii]],[array_pub[ii]] );
                                 let td = document.createElement("td");
                                 td.innerHTML=publications[pub_index][array_pub[ii]];
@@ -331,8 +331,8 @@ Plotly.d3.json(url, function (figure) {
                     button1.className+="btn btn-success me-2";
                     button1.innerHTML = "Download Publications information PDF";
                     div1.appendChild(button1);
-                    
-                
+
+
                     $("#download_pdf_publication")
                     .off()
                     .on("click", () => {
@@ -342,10 +342,10 @@ Plotly.d3.json(url, function (figure) {
                         let col = ["Property", "Value"],
                             row = [];
                         for (let key of lst) {
-                            row.push([key, source_data[key]]);    
+                            row.push([key, source_data[key]]);
                         }
                         // if publication atleast 1
-                        for (let index=0; index<(publications.length); index++){ 
+                        for (let index=0; index<(publications.length); index++){
                             row.push(["        ", "        "]);
                             row.push(["Publication", index+1]);
                             row.push(["Title", publications[index].Title]);
@@ -361,7 +361,7 @@ Plotly.d3.json(url, function (figure) {
                     document.getElementById("pub_table").hidden = false;
                 }else{
                     if (previous_state===source_data["Source Name"]){
-                        document.getElementById("pub_table").hidden = false; 
+                        document.getElementById("pub_table").hidden = false;
                     }else{
                     document.getElementById("pub_table").hidden = true;
                     }
