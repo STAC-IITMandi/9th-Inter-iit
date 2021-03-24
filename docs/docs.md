@@ -10,7 +10,7 @@ The problem involves developing a visualization tool for identifying the charact
 
 We were given three catalogs A, B and C consisting of cosmic sources, astrosat data and publications respectively.
 
-**Catalogue A**: This is catalogue of observed cosmic sources from observatios different from [Astrosat](https://www.isro.gov.in/astrosat-0).
+**Catalogue A**: This is catalogue of observed cosmic sources from observations different from [Astrosat](https://www.isro.gov.in/astrosat-0).
 
 **Catalogue B**: This is catalogue of cosmic sources observed by [Astrosat](https://www.isro.gov.in/astrosat-0).
 
@@ -29,7 +29,7 @@ To run the web application you can
 
 When you run the web app, you can access it at `https://127.0.0.1:8080`.
 
-The web app will consist a plot of aitoff projection of the sky map. We used the galatic coordinates to plot all the sources.
+The web app consists a plot of aitoff projection of the sky map. We used the galatic coordinates to plot all the sources.
 
 Here is a look of web application
 

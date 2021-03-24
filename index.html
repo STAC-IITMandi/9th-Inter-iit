@@ -27,6 +27,7 @@
         #graph {
             height: 70vh;
         }
+
         .center {
             display: flex;
             justify-content: center;
@@ -66,11 +67,13 @@
     <div id="showdata"></div>
 
     <div class="container" id="info_table" hidden>
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped w-auto">
             <thead class="thead-dark">
             <tr>
                 <th>Name</th>
-                <th id="instru" hidden>Astrosat Instrument</th>
+                <th id="Astrosat_Instrument" hidden>Astrosat Instrument</th>
+                <th id="ProposalId" hidden>Proposal ID</th>
+                <th id="Observation_Id" hidden>Observation ID</th>
                 <th>GLON</th>
                 <th>GLAT </th>
                 <th>Astrosat Observed</th>
@@ -80,7 +83,9 @@
             <tbody>
             <tr>
                 <td id="info_Name"></td>
-                <td id="info_Astrosat Instrument" hidden></td>
+                <td id="info_Astrosat_Instrument" hidden></td>
+                <td id="info_ProposalId" hidden></td>
+                <td id="info_Observation_Id" hidden></td>
                 <td id="info_GLON"></td>
                 <td id="info_GLAT"></td>
                 <td id="info_Astrosat_obs"></td>
@@ -105,8 +110,7 @@
                     <th>Url</th>      
                 </tr>
             </thead>
-            <tbody id="tbody_">
-            </tbody>
+            <tbody id="pub_body"></tbody>
         </table>
         <div class="justify-content-center text-center" id="publication_pdf"></div>
     </div>
