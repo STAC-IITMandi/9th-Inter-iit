@@ -36,6 +36,8 @@ Inside there are two apps that must be run sequentially for node application to 
 1. On terminal, run `pip3 install -r requirements.txt`
 2. Run `python cat_json.py` to create json files.
 3. Now with data directory present in same folder as executable You can run the app.
+4. `chmod +x <executable_name>`
+5. `./<executable_name>`
 
 ### Requirements for linux and Mac users:-
 
