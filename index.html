@@ -9,6 +9,8 @@
     <style type="text/css">
         body {
             background-color: #ebf5fb;
+            background-image: url("https://user-images.githubusercontent.com/56690827/112338359-bf9b7300-8ce4-11eb-98de-bf197cee114b.jpg");
+            background-size: cover;
         }
         
         h1 {
@@ -56,7 +58,7 @@
 <body>
     <div class="container pt-5 pl-5 pr-5">
         <div class="col-12">
-            <div class="col-sm text-center">
+            <div class="col-sm text-center text-white">
                 <h1>Cosmic Sources Visualisation</h1>
             </div>
             <div class="col-sm">
@@ -80,7 +82,7 @@
                     <th>Download Data</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="bg-white">
                 <tr>
                     <td id="info_Name"></td>
                     <td id="info_Astrosat_Instrument" hidden></td>
@@ -100,7 +102,7 @@
     </div>
     <div class="container" id="pub_table" hidden>
         <div id="publications" class="text-left">
-            <h3 class="text-center">Publications of Observed Astrosat Data</h3>
+            <h3 class="text-center text-white" >Publications of Observed Astrosat Data</h3>
             <table class="table table-bordered table-striped">
                 <thead class="thead-dark">
                     <tr>
@@ -110,7 +112,7 @@
                         <th>Url</th>
                     </tr>
                 </thead>
-                <tbody id="pub_body"></tbody>
+                <tbody class="bg-white" id="pub_body"></tbody>
             </table>
             <div class="justify-content-center text-center" id="publication_pdf"></div>
         </div>
