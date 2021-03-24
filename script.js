@@ -101,7 +101,7 @@ Plotly.d3.json(url, function(figure) {
             marker: {
                 symbol: "star",
                 size: 8,
-                color: "black",
+                color: "red",
             },
         },
         {
@@ -179,15 +179,22 @@ Plotly.d3.json(url, function(figure) {
             showocean: false,
             showcountries: false,
             showsubunits: false,
+            bgcolor:  'rgba(0,0,0,0)',
         },
         yaxis: { title: "LAT" },
         xaxis: { title: "LON" },
         font: {
             size: 24,
         },
-        paper_bgcolor: "#f4fbfe",
-        plot_bgcolor: "#f4fbfe",
-        // autosize: true,
+        margin: {
+            l:0,
+            r:0,
+            t:0,
+            b:0,
+        },
+        paper_bgcolor: "transparent",
+        // plot_bgcolor: "#f4fbfe",
+        autosize: true,
     };
 
     var config = { responsive: true };
@@ -234,6 +241,7 @@ Plotly.d3.json(url, function(figure) {
                 let ele1 = document.createElement("div");
                 ele1.className += "col-sm text-center";
                 let ele2 = document.createElement("h3");
+                ele2.className+="text-white";
                 ele2.innerHTML =
                     "Data for " +
                     source_data.Name +
