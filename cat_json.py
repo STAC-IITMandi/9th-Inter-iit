@@ -11,7 +11,7 @@ import os
 import sys
 
 def catA_json(data_dir="data", Fields=['Type', 'RAh', 'RAm', 'RAs', 'u_RAs', 'DE-', 'DEd', 'DEm', 'DEs', 'u_DEs', 'GLON', 'GLAT', 'Pos', 'e_Pos', 'Opt', 'r_Opt', 'Vmag', 'Vmagl', 'u_Vmag', 'B-V', 'u_B-V', 'B-Vl', 'U-B', 'l_E(B-V)', 'E(B-V)', 'l_E(B-V)2', 'E(B-V)2', 'u_E(B-V)', 'r_Vmag', 'l_Fx', 'Fx', 'Fxu', 'Range', 'r_Fx', 'Porb', 'Porb2', 'u_Porb', 'Ppulse', 'u_Ppulse', 'r_Ppulse', 'Cat', 'SpType', 'Name2',  'u_Name2', 'Name3']):
-    A=cat_functions.catA(dirn_name=data_dir)
+    A=cat_functions.catA(dir_name=data_dir)
     data=[]
     for i in range(280):
         data.append({'Name': A.index[i]})
@@ -46,13 +46,13 @@ def BtoC_json():
     C=json.load(open(os.path.join("data", "Astrosat_Pubs.json")))
     B = B['objects']
     C = C['publications']
-    search=cat_functions.relateBtoC(B,C)
+    search=cat_functions.MatchingBtoC(B,C)
     with open(os.path.join("data", "BtoC.json"), 'w') as f:
         json.dump(search, f, indent=3)
 
 def AtoB_json():
-    A=json.load(open("Dataset.json"))
-    B=json.load(open("Astrosat.json"))
+    A=json.load(open("./data/Dataset.json"))
+    B=json.load(open("./data/Astrosat.json"))
     A = A['objects']
     B = B['objects']
     search = cat_functions.MatchingBtoA(A, B)
