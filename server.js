@@ -15,18 +15,22 @@ path.join(__dirname, '/data/BtoC.json');
 path.join(__dirname, 'index.html');
 path.join(__dirname, 'script.js');
 
-var standard_input = process.stdin;
-standard_input.setEncoding('utf-8');
-console.log("Specify data folder for json files or press enter for default: ");
-standard_input.on('data', function(data) {
-    if (data != "\n") {
-        data_dir = data.replace(/\n*$/, "");
-        console.log("Sourcing json files from ", data_dir, " directory");
-    }
+// var standard_input = process.stdin;
+// standard_input.setEncoding('utf-8');
+// console.log("Specify data folder for json files or press enter for default: ");
+// standard_input.on('data', function(data) {
+//     if (data != "\n") {
+//         data_dir = data.replace(/\n*$/, "");
+//         console.log("Sourcing json files from ", data_dir, " directory");
+//     }
 
-    app.listen(PORT, () => console.log(`App is live at ${URL}`));
+//     app.listen(PORT, () => console.log(`App is live at ${URL}`));
 
-});
+// });
+
+var data_dir = "./data";
+
+app.listen(PORT, () => console.log(`App is live at ${URL}`));
 
 const Dataset = JSON.parse(fs.readFileSync(path.join(__dirname, data_dir, "Dataset.json"), 'utf8'));
 let Publications = (JSON.parse(fs.readFileSync(path.join(__dirname, data_dir, "Astrosat_Pubs.json"), 'utf8')));
